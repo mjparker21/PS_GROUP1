@@ -118,4 +118,4 @@ data |>
   )
 ```
 
-@tbl-summary shows the mean, median and standard deviation of Wt24, Wt1 and Solids by Sex. @tbl-summary highlights that there appears to be a slight difference between Wt24 by sex. There does not appear to be a difference in Wt1 and Solids by sex.
+@tbl-summary shows the mean, median and standard deviation of Wt24, Wt1 and Solids by Sex. @tbl-summary highlights that there appears to be a slight difference between Wt24 by sex. Additionally, There does not appear to be a difference in Wt1 and Solids by sex.

@@ -1,0 +1,121 @@
+---
+title: "Pro Skills Group Project"
+author: "Group 1"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(corrr)
+library(ggplot2)
+library(tidyverse)
+library(gt)
+library(gridExtra)
+library(MASS)
+library(patchwork)
+library(moderndive)
+library(knitr)
+library(kableExtra)
+setwd("/Users/mattparker/Downloads")
+data <- read.csv("project1-growth-wt.csv")
+```
+
+## Exploratory Analysis
+
+```{r}
+#| echo: false
+#| fig-cap: Relationship between child weight at 24 months and weight at 1 month by sex
+#| label: fig-scat-wt24-wt1
+#| fig-align: center
+#| fig-width: 4.5
+#| fig-height: 3.5
+ggplot(data, aes(x = Wt1, y = Wt24, color = Sex)) +
+  geom_point() +
+  labs(x = "Weight at 1 month (kg)", y = "Weight at 24 months (kg)", color = "Sex")
+```
+
+@fig-scat-wt24-wt1 shows the relationship between the child's weight at 24 months against the child's weight at 1 month. From @fig-scat-wt24-wt1 it appears that there is a positive, moderate to strong linear relationship between a child's weight at 24 months and weight at 1 month. Moreover, with the exception of a few points there appears to be a distinction by gender with female children having lower weight and male children having a higher weight.
+
+```{r}
+#| echo: false
+#| warning: false
+cors.male <- data |> filter(,Sex=="Male") |> correlate(,diagonal = 1)
+cors.female <- data |> filter(,Sex=="Female") |> correlate(,diagonal = 1)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| tbl-cap: Correlations between numerical variables by sex
+#| tbl-subcap: 
+#|  - Correlations for numerical variables for male children
+#|  - Correlations for numerical variables for female children
+#| layout-ncol: 2
+#| tbl-cap-location: bottom
+#| label: tbl-corrs
+
+# Male table
+male_table <- cors.male |> 
+  gt() |> 
+  fmt_number(decimals = 2) |> 
+  tab_style(style = cell_text(weight = "bold"), locations = cells_column_labels())
+
+# Female table
+female_table <- cors.female |> 
+  gt() |> 
+  fmt_number(decimals = 2) |> 
+  tab_style(style = cell_text(weight = "bold"), locations = cells_column_labels())
+
+# Print tables using layout-ncol: 2 to automatically place them side by side
+male_table
+female_table
+```
+
+@tbl-corrs shows the correlation between numerical variables for male and female children. From @tbl-corrs-1 we can see that for males Wt1 and Wt24 are moderately, positivly correlated, whereas Solids against Wt24 and Wt1 are weakly negatively correlated. @tbl-corrs-2 highlights that this is slightly different for female children as there appears to be a higher positive correlation between Wt24 and Wt1. Additionally, there appears to be a moderate negative correlation between Solids and Wt24 for female children and a weak-moderate correlation between Solids and Wt1. This suggests that there may be an interaction between Wt1 and Solids by Sex.
+
+```{r}
+#| echo: false
+#| label: tbl-summary
+#| tbl-cap:  Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by sex.
+data |>
+   summarize('Wt24.Mean' = mean(Wt24),
+             'Wt24.Median' = median(Wt24),
+             'Wt24.sd' = sd(Wt24),
+             'Wt1.Mean' = mean(Wt1),
+             'Wt1.Median' = median(Wt1),
+             'Wt1.sd' = sd(Wt1),
+             'Solids.Mean' = mean(Solids),
+             'Solids.Median' = median(Solids),
+             'Solids.sd' = sd(Solids),
+             .by = Sex) |>
+ gt() |> 
+  fmt_number(decimals=2) |>
+  tab_spanner(
+    label = "Wt24",
+    columns = c(Wt24.Mean, Wt24.Median,Wt24.sd)
+  ) |>
+  tab_spanner(
+    label = "Wt1",
+    columns = c(Wt1.Mean, Wt1.Median,Wt1.sd)
+  ) |>
+    tab_spanner(
+    label = "Solids",
+    columns = c(Solids.Mean, Solids.Median, Solids.sd)
+  ) |>
+  cols_label(
+    Wt24.Mean = html("Mean"),
+    Wt24.Median = html("Median"),
+    Wt24.sd = html("Std.Dev"),
+    Wt1.Mean = html("Mean"),
+    Wt1.Median = html("Median"),
+    Wt1.sd = html("Std.Dev"),
+    Solids.Mean = html("Mean"),
+    Solids.Median = html("Median"),
+    Solids.sd = html("Std.Dev")
+  )
+```
+
+@tbl-summary shows the mean, median and standard deviation of Wt24, Wt1 and Solids by Sex. @tbl-summary highlights that there appears to be a slight difference between Wt24 by sex. There does not appear to be a difference in Wt1 and Solids by sex.

@@ -157,7 +157,6 @@ ggplot(data, aes(x = Sex, y = Wt24, fill = Sex)) +
 
 @fig-box-wt24 extends this analysis to weight at 24 months, where the observed trend continues. Male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.
 
-These findings align with the earlier correlation analysis, reinforcing the distinction in weight patterns between male and female children over time.
 
 
 ```{r}
@@ -180,4 +179,4 @@ ggplot(data, aes(x = Solids, y = Wt24, color = Sex)) +
 
 ```
 
-@fig-scat-wt24-solids illustrates the relationship between weight at 24 months (Wt24) and the age at which solid foods were introduced (Solids), with separate regression lines for males and females. The plot suggests a slight negative trend for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weaker or negligible relationship between solid food introduction and weight at 24 months for male children. The variability in weight is higher for males, indicating that other factors likely influence weight development more than the timing of solid food introduction.
+@fig-scat-wt24-solids illustrates the relationship between weight at 24 months (Wt24) and the age at which solid foods were introduced (Solids), with separate regression lines for males and females. The plot suggests a slight negative trend for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weaker or negligible relationship between solid food introduction and weight at 24 months for male children. 

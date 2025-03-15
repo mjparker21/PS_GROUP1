@@ -1,0 +1,374 @@
+---
+title: "Group Project"
+author: "Katie Colligan (2658553c)"
+execute: 
+  echo: false
+  eval: true
+number-sections: true
+format:
+  html:
+    embed-resources: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(readr)
+library(ggplot2)
+library(tidyverse)
+library(tidymodels)
+library(gt)
+library(MASS)
+library(patchwork)
+library(moderndive)
+library(knitr)
+
+growth <- read.csv('project1-growth-wt.csv')
+```
+
+# Introduction
+
+# Formal Analysis {#sec-FA}
+
+## Primary Model {#sec-PM}
+
+To investigate how well weight at 24 months can be predicted using a linear model with weight at 1 month as the explantory variable, we begin by fitting the following regression model. This model can be written as:
+
+$$\widehat{Wt24_i} = \hat{\alpha}+\hat{\beta}\ Wt1_i + \epsilon_i ~~~~~  \epsilon_i\sim N(0, \sigma^2)$$
+
+Where $Wt24_i$ is the weight of the $i$th baby at 24 months. $Wt1_i$ is the weight of the $i$th baby at 1 month. $\alpha$ is the intercept. That is, it is the predicted weight at 24 months when $Wt1=0$, whilst biologically meaningless this parameter is necessary. $\beta$ is the slope. That is, it is the average change in weight at 24 months for each additional kilogram increase in weight at 1 months. $\epsilon_i$ is the error term for the $i$th baby and it is assumed to be normally distributed with mean 0 and variance $\sigma^2$.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+int.model <- lm(Wt24 ~ Wt1, data = growth)
+step.model <- stepAIC(int.model, direction = "backward", trace = FALSE)
+Coefs <- round(coef(step.model), 3)
+AIC <- step.model$anova[, 6]
+```
+
+```{r}
+#| echo: false
+#| label: tbl-regtable
+#| tbl-cap: Estimates of the regression model coefficients.
+get_regression_table(step.model)[, c(1, 2, 5)] |>
+  gt() |> 
+  fmt_number(decimals=2) |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+```
+
+From @tbl-regtable we see the coefficients for the model. We sub these values into our mathematical equation above to obtain the regression line below. All p-values appear to be close to zero, that is both coefficents are appear to be statistically significant.
+
+$$\widehat{Wt24_i}=4.82+1.80Wt1_i+\epsilon_i$$ That is, for every $1$kg increase in weight at 1 month, we would expect weight at 24 months would increase by 1.80kg. And, for a baby whose weight a 1 month is 0kg we would expect their weight at 24 months to be 4.82kg.
+
+```{r}
+#| echo: false
+#| label: fig-scat2
+#| message: false
+#| fig-cap: Relationship between Weight at 1 Month and Weight at 24 months with regression line superimposed.
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+
+ggplot(growth, aes(x = Wt1, y = Wt24)) +
+  geom_point() +
+  labs(x = "Weight at 1 Month (kilograms)", y = "Weight at 24 Months (kilograms)") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+#| echo: false
+#| 
+regression.points <- get_regression_points(int.model)
+```
+
+```{r}
+#| echo: false
+#| fig-cap: Residuals versus Weight at 1 Month (left) and the fitted values (right)
+#| label: fig-resids
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+
+
+p1 <- ggplot(regression.points, aes(x = Wt1, y = residual)) + 
+  geom_point() + 
+  labs(x = "Weight at 1 Month (kilograms)", y = "Residual") + 
+  geom_hline(yintercept = 0, col = "blue", linewidth = 1)
+
+
+p2 <- ggplot(regression.points, aes(x = Wt24_hat, y = residual)) + 
+  geom_point() + 
+  labs(x = "Fitted values", y = "Residual") + 
+  geom_hline(yintercept = 0, col = "blue", linewidth = 1)
+
+
+p1 + p2 + plot_layout(ncol = 2)
+```
+
+@fig-resids displays the residuals verses weight at 1 month (left) and the residuals versus fitted values (right). From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers, these do not appear to be influential.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-residhist
+#| fig-cap: Histograms of the residuals
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+
+
+ggplot(regression.points, aes(x = residual)) +
+      geom_histogram( color = "white") +
+      labs(x = "Residual") 
+```
+
+@fig-residhist allows us to check that the residuals are normally distributed. Although it is not a perfect bell curve, the residuals appear to follow a normal distribution centered at mean 0.
+
+## Secondary Models
+
+To determine if the above model can be improved by adding the child's sex and/or age at introduction to solids as further explanatory variables we begin by fitting the following model:
+
+$$\widehat{Wt24_i} = \hat{\alpha} +\hat{\beta_1} Wt_i + \hat{\beta_2} Solids_i + \hat{\beta_3}\mathbb{I}_{male}+\epsilon_i  ~~~~~  \epsilon_i\sim N(0, \sigma^2)$$
+
+Where $Wt24_i$ is the weight of the $i$th baby at 24 months. $Wt1_i$ is the weight of the $i$th baby at 1 month. $\alpha$ is the intercept. That is, it is the predicted weight at 24 months when $Wt1=0$, whilst biologically meaningless this parameter is necessary. $\beta_1$ is the slope of Wt1. $\beta_2$ is the slope of $Solids_i$ which is the age of weight the $i$th baby was introduced to solids and $\mathbb{I}_{male}$ is an indicator variable that takes on the following values;
+
+$$
+I_{\text{male}} =
+\begin{cases} 
+1, & \text{if Sex = male} \\
+0, & \text{if Sex = female}
+\end{cases}
+$$
+
+And $\epsilon_i$ is the error term for the $i$th baby and it is assumed to be normally distributed with mean 0 and variance $\sigma^2$.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+int.model2 <- lm(Wt24 ~ Wt1 + Solids + Sex, data = growth)
+step.model2 <- stepAIC(int.model2, direction = "backward", trace = FALSE)
+Coefs2 <- round(coef(step.model2), 3)
+AIC2 <- step.model2$anova[, 6]
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-regtable2
+#| tbl-cap: Estimates of the regression model coefficients.
+get_regression_table(step.model2)[, c(1, 2, 5)] |>
+  gt() |> 
+  fmt_number(decimals=2) |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+```
+
+From @tbl-regtable2 we the estimates for the regression model. We do not receive a coefficient for $\beta_2$ due to the fact that when we fit the model we used Akaike Information Criterion (AIC) to carry out model comparisons. Through this model comparison method, we dropped $Solids_i$ from the model. Additionally, from @tbl-regtable2 we see that all p-values are close to zero so we conclude the three variables above are statistically significant. Given this information, we conclude the best model is as follows:
+
+$$
+\widehat{Wt24_i} = 5.23+1.63Wt1_i+0.53\mathbb{I}_{male}+\epsilon_i ~~~~~~~~~~  \epsilon_i\sim N(0, \sigma^2)
+$$
+
+```{r}
+#| echo: false
+#| label: fig-scat3
+#| message: false
+#| fig-cap: Relationship between Wt24 and Wt1 by Sex with the regression lines superimposed.
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+
+ggplot(growth, aes(x = Wt1, y = Wt24, color = Sex)) +
+  geom_point() +
+  labs(x = "Weight at 1 month (kilograms)", y = "Weight at 24 months (kilograms)", color = "Sex") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+#| echo: false
+#| 
+regression.points2 <- get_regression_points(int.model2)
+```
+
+```{r}
+#| echo: false
+#| fig-cap: Residuals versus Weight at 1 month (left) and the fitted values (right) by Sex
+#| label: fig-resids2
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+
+
+p1 <- ggplot(regression.points2, aes(x = Wt1, y = residual)) +
+      geom_point() +
+      labs(x = "Weight at 1 Month (kilograms)", y = "Residual") +
+      geom_hline(yintercept = 0, col = "blue", linewidth = 1) +
+      facet_wrap(~ Sex)
+
+p2 <- ggplot(regression.points2, aes(x = Wt24_hat, y = residual)) +
+      geom_point() +
+      labs(x = "Fitted values", y = "Residual") +
+      geom_hline(yintercept = 0, col = "blue", linewidth = 1) +
+      facet_wrap(~ Sex)
+
+p1+p2+plot_layout(ncol=2)
+```
+
+@fig-resids2 displays the residuals verses weight at 1 month split by sex (left) and the residuals versus fitted values split by sex (right). From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers for both sex, these do not appear to be influential.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-residhist2
+#| fig-cap: Histograms of the residuals by Sex
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+
+
+ggplot(regression.points2, aes(x = residual)) +
+      geom_histogram( color = "white") +
+      labs(x = "Residual") +
+      facet_wrap(~ Sex)
+```
+
+@fig-residhist2 allows us to check that the residuals are normally distributed for both male and female babies. Although it is neither is a perfect bell curve due to a few outliers, these outleirs do not appear to be influential and we conclude that the residuals appear to follow a normal distribution centered at mean 0.
+
+We conclude it is reasonable to fit this linear regression model. Through AIC model comparision we determine that the best model does not include the variable $Solids$. However, we must compare the above model with the model given in @sec-PM.
+
+```{r}
+#| echo: false
+#| label: tbl-AIC
+#| tbl-cap: AIC values of the 2 modles
+
+AIC_table <- data.frame(
+  Model = c("Model with Wt1 and Sex", "Model with Wt1 Only"),
+  AIC = c(40.5, AIC)
+)
+AIC_table |>
+  gt() |>
+  fmt_number(columns = 2, decimals = 2) |>  # Round AIC values to 2 decimal places
+  tab_style(
+    style = cell_text(weight = "bold"),  # Bold column labels
+    locations = cells_column_labels()
+  ) |>
+  tab_header(title = "AIC Comparison Table")
+```
+
+From @tbl-AIC we see that the more favorable model is the model that includes both $Wt1$ and $Sex$ as predictor variables of $Wt24$ due to the lower AIC value.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+growth$Weight_Change <- growth$Wt24-growth$Wt1
+
+
+
+```
+
+To determine if the change in weight from 1 month to 24 months is different for male and female babies we fit the following model:
+
+$$Wt24_i-Wt1_i=\alpha +\beta\mathbb{I}_{male}+\epsilon_i ~~~~~~~~~~  \epsilon_i\sim N(0, \sigma^2)$$
+
+Where $Wt24_i-Wt1_i$ is the weight change between 24 months and 1 month for the $i$th baby, $\mathbb{I}_{male}$ is an indicator variable that takes on the following values:
+
+$$
+I_{\text{male}} =
+\begin{cases} 
+1, & \text{if Sex = male} \\
+0, & \text{if Sex = female}
+\end{cases}
+$$
+
+And $\epsilon_i$ is the error term for the $i$th baby and it is assumed to be normally distributed with mean 0 and variance $\sigma^2$.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+int.model3 <- lm(Weight_Change~ Sex, data = growth)
+step.model3 <- stepAIC(int.model3, direction = "backward", trace = FALSE)
+Coefs3 <- round(coef(step.model3), 3)
+AIC3 <- step.model3$anova[, 6]
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-regtable3
+#| tbl-cap: Estimates of the regression model coefficients.
+get_regression_table(step.model3)[, c(1, 2, 5)] |>
+  gt() |> 
+  fmt_number(decimals=2) |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+```
+
+Since the coefficients displayed in @tbl-regtable3 are all very close to 0, we conclude that they are all statistically significant and should be kept in the model. Therefore it is reasonable to assume that there is statistically significant evidence that change in weight from 1 month to 24 months is different for male and female babies.
+
+```{r}
+#| echo: false
+#| 
+regression.points3 <- get_regression_points(int.model3)
+```
+
+```{r}
+#| echo: false
+#| fig-cap: Residuals versus fitted values by Sex
+#| label: fig-resids5
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+
+
+ ggplot(regression.points3, aes(x = Weight_Change_hat, y = residual)) +
+      geom_point() +
+      labs(x = "Fitted values", y = "Residual") +
+      geom_hline(yintercept = 0, col = "blue", linewidth = 1) +
+      facet_wrap(~ Sex)
+
+
+```
+
+@fig-resids5 displays the fitted values versus the residuals split by sex. From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers for both sex, these do not appear to be influential.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-residhist3
+#| fig-cap: Histograms of the residuals by Sex
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+
+
+ggplot(regression.points3, aes(x = residual)) +
+      geom_histogram( color = "white") +
+      labs(x = "Residual") +
+      facet_wrap(~ Sex)
+```
+
+@fig-residhist3 allows us to check that the residuals are normally distributed for both male and female babies. Although neither it is a perfect bell curve, the residuals appear to follow a normal distribution centered at mean 0 for both male and female babies.
+
+# Conclusion
+
+In conclusions, based on our explanatory analysis in \*\*\* and formal analysis in @sec-FA we believe that....
+
+We also conclude that this model can be improved by adding the child's sex however it is not improved by adding their age at introduction to solids. These comparisons and conclusions were done using Akaike Information Criterion as per @tbl-AIC. Additionally, we conclude that the change in weight from 1 month to 24 months is different for male and female babies due to the statistical significance of the coefficients seen in @tbl-regtable3.
+
+The limitations of the analysis carried about above is

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Haotian Liu">
+
+<title>Predicting Infant Weight at 24 Months Using Early Life Factors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Group work_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Group work_files/libs/quarto-html/quarto.js"></script>
+<script src="Group work_files/libs/quarto-html/popper.min.js"></script>
+<script src="Group work_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Group work_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Group work_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Group work_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Group work_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Group work_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Group work_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Predicting Infant Weight at 24 Months Using Early Life Factors</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Haotian Liu </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Early childhood growth is an important indicator of future health outcomes. This study investigates a dataset from Queen Mother’s Hospital, Glasgow, where 127 babies were monitored for weight progression at 1 month and 24 months. Additionally, the sex of each infant and the age at which solid foods were introduced were recorded. Understanding the factors influencing early weight gain can help in predicting future growth patterns and identifying potential health risks.</p>
+<p>We aim to answer:</p>
+<ol type="1">
+<li><p><strong>Can weight at 24 months (<em>Wt24</em>) be accurately predicted using weight at 1 month (<em>Wt1</em>)?</strong></p></li>
+<li><p><strong>Does adding sex and/or the age at which solid foods were introduced improve prediction accuracy?</strong></p></li>
+<li><p><strong>Is there a significant difference in weight gain between male and female infants?</strong></p></li>
+</ol>
+</section>
+<section id="exploratory-analysis" class="level1">
+<h1>Exploratory Analysis</h1>
+<section id="data-import-and-summary" class="level2">
+<h2 class="anchored" data-anchor-id="data-import-and-summary">Data Import and Summary</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"project1-growth-wt.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Sex                 Wt1             Wt24           Solids     
+ Length:113         Min.   :3.140   Min.   : 8.46   Min.   : 4.00  
+ Class :character   1st Qu.:4.000   1st Qu.:11.55   1st Qu.:10.00  
+ Mode  :character   Median :4.340   Median :12.50   Median :12.00  
+                    Mean   :4.337   Mean   :12.61   Mean   :11.47  
+                    3rd Qu.:4.700   3rd Qu.:13.50   3rd Qu.:13.00  
+                    Max.   :5.940   Max.   :17.90   Max.   :22.00  </code></pre>
+</div>
+</div>
+<p>The dataset includes <strong>weight at 1 month (Wt1)</strong>, <strong>weight at 24 months (Wt24)</strong>, <strong>sex</strong>, and <strong>age of introduction to solids (Solids)</strong>.</p>
+<p>The <strong>five-number summary</strong> of <em>Wt24</em> by sex provides insight into the distribution of weights at 24 months.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Min =</span> <span class="fu">min</span>(Wt24), </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">Q1 =</span> <span class="fu">quantile</span>(Wt24, <span class="fl">0.25</span>), </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">Median =</span> <span class="fu">median</span>(Wt24), </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Q3 =</span> <span class="fu">quantile</span>(Wt24, <span class="fl">0.75</span>), </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">Max =</span> <span class="fu">max</span>(Wt24))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summary_table, <span class="at">caption =</span> <span class="st">"Five-Number Summary of Wt24 by Sex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Five-Number Summary of Wt24 by Sex</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Sex</th>
+<th style="text-align: right;">Min</th>
+<th style="text-align: right;">Q1</th>
+<th style="text-align: right;">Median</th>
+<th style="text-align: right;">Q3</th>
+<th style="text-align: right;">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Female</td>
+<td style="text-align: right;">8.46</td>
+<td style="text-align: right;">10.850</td>
+<td style="text-align: right;">11.850</td>
+<td style="text-align: right;">12.800</td>
+<td style="text-align: right;">15.95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Male</td>
+<td style="text-align: right;">10.20</td>
+<td style="text-align: right;">12.175</td>
+<td style="text-align: right;">13.025</td>
+<td style="text-align: right;">13.825</td>
+<td style="text-align: right;">17.90</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="scatterplot-wt24-vs-wt1-by-sex" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-wt24-vs-wt1-by-sex">Scatterplot: Wt24 vs Wt1 by Sex</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Wt1, <span class="at">y =</span> Wt24, <span class="at">color =</span> Sex, <span class="at">shape =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Weight at 24 Months vs. Weight at 1 Month"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Weight at 1 Month (kg)"</span>, <span class="at">y =</span> <span class="st">"Weight at 24 Months (kg)"</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Group-work_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>Interpretation:</strong> With points coloured and shaped according to sex, this scatterplot shows the association between weight at one month (Wt1) and weight at 24 months (Wt24). There is a clear positive correlation, indicating that infants who weigh more at 1 month generally continue to weigh more at 24 months. Male infants, represented by blue triangles, appear to be slightly more dispersed, with some reaching higher weights at 24 months, while female infants, shown as red circles, are more clustered within a lower-to-mid weight range. Although there is some variation between the sexes, this pattern indicates that early-life weight is a significant factor in determining long-term weight.</p>
+</section>
+<section id="boxplot-weight-difference-by-sex" class="level2">
+<h2 class="anchored" data-anchor-id="boxplot-weight-difference-by-sex">Boxplot: Weight Difference by Sex</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Weight_Diff =</span> Wt24 <span class="sc">-</span> Wt1)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Sex, <span class="at">y =</span> Weight_Diff, <span class="at">fill =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Weight Change (Wt24 - Wt1) by Sex"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sex"</span>, <span class="at">y =</span> <span class="st">"Weight Change (kg)"</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Group-work_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>Interpretation:</strong> The boxplot compares the weight gain from 1 month to 24 months between male and female infants. Both groups exhibit similar median weight gains, but males show a slightly higher median value and a wider interquartile range, suggesting greater variability in their weight change. Additionally, there are a few outliers in both groups, indicating that some infants experienced significantly higher-than-average weight gain. While the overall distribution is comparable, this plot suggests that males may have slightly greater variation in weight gain, though the differences between male and female do not appear dramatic.</p>
+</section>
+<section id="scatterplot-wt24-vs-solids-by-sex" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-wt24-vs-solids-by-sex">Scatterplot: Wt24 vs Solids by Sex</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Solids, <span class="at">y =</span> Wt24, <span class="at">color =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Weight at 24 Months vs. Age of Introduction to Solids"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Age at Introduction to Solids (months)"</span>, <span class="at">y =</span> <span class="st">"Weight at 24 Months (kg)"</span>) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Group-work_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Interpretation: The scatterplot examines whether the age at which infants were introduced to solid foods influences their weight at 24 months. The data points are widely spread, and no clear trend or strong linear relationship is evident, suggesting that the timing of solid food introduction does not have a substantial impact on later weight. Both male and female infants exhibit a broad range of weights across different ages of solid introduction, with some children introduced to solids early (~4-6 months) showing high weights at 24 months, while others remain on the lower end of the spectrum. This suggests that other factors, such as overall nutrition, genes, and feeding habits beyond the introduction of solids, may play a more critical role in determining an infant’s weight at two years old.</p>
+</section>
+<section id="summary-statistics-by-sex" class="level2">
+<h2 class="anchored" data-anchor-id="summary-statistics-by-sex">Summary Statistics by Sex</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Min =</span> <span class="fu">min</span>(Wt24), <span class="at">Q1 =</span> <span class="fu">quantile</span>(Wt24, <span class="fl">0.25</span>), <span class="at">Median =</span> <span class="fu">median</span>(Wt24),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Q3 =</span> <span class="fu">quantile</span>(Wt24, <span class="fl">0.75</span>), <span class="at">Max =</span> <span class="fu">max</span>(Wt24)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  Sex      Min    Q1 Median    Q3   Max
+  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 Female  8.46  10.8   11.8  12.8  16.0
+2 Male   10.2   12.2   13.0  13.8  17.9</code></pre>
+</div>
+</div>
+</section>
+<section id="correlation-coefficients-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-coefficients-matrix">Correlation Coefficients Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(data[, <span class="fu">c</span>(<span class="st">"Wt1"</span>, <span class="st">"Wt24"</span>, <span class="st">"Solids"</span>)], <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Wt1       Wt24     Solids
+Wt1     1.0000000  0.6472669 -0.1588981
+Wt24    0.6472669  1.0000000 -0.1874047
+Solids -0.1588981 -0.1874047  1.0000000</code></pre>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Wt1 and Wt24 have a strong positive correlation.</p>
+</section>
+</section>
+<section id="formal-analysis" class="level1">
+<h1>Formal Analysis</h1>
+<section id="simple-linear-regression-wt24-wt1" class="level2">
+<h2 class="anchored" data-anchor-id="simple-linear-regression-wt24-wt1">Simple Linear Regression: Wt24 ~ Wt1</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>lm_simple <span class="ot">&lt;-</span> <span class="fu">lm</span>(Wt24 <span class="sc">~</span> Wt1, <span class="at">data =</span> data)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_simple)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Wt24 ~ Wt1, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.9294 -0.7976 -0.0937  0.7234  3.6010 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   4.8159     0.8780   5.485 2.63e-07 ***
+Wt1           1.7960     0.2008   8.946 9.46e-15 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.202 on 111 degrees of freedom
+Multiple R-squared:  0.419, Adjusted R-squared:  0.4137 
+F-statistic: 80.03 on 1 and 111 DF,  p-value: 9.456e-15</code></pre>
+</div>
+</div>
+<p>The simple linear regression model evaluates the relationship between weight at 1 month (Wt1) and weight at 24 months (Wt24), producing a highly significant result. The estimated regression equation is:</p>
+<p><strong>Formula:</strong> [ Wt24 = _0 + _1 Wt1 + ]</p>
+<p>where the intercept ( _0=4.8159) represents the expected weight at 24 months for an infant with a weight of 0 kg at 1 month, though this is not meaningful in practice since no infants have zero weight. The coefficient for Wt1 ( _1 = 1.7960) is highly significant (p-value = 9.46e-15), indicating a strong positive association between Wt1 and Wt24. This means that for each additional kilogram of weight at 1 month, the expected weight at 24 months increases by approximately 1.80 kg.</p>
+<p>The model explains a moderate proportion of the variability in Wt24, as indicated by an ^2 value of 0.419. This means that about 41.9% of the variation in weight at 24 months is explained by weight at 1 month. While this suggests a strong relationship, a significant portion of the variance remains unexplained, implying that other factors (e.g., sex, feeding habits, genetic factors) may contribute to weight differences. The residual standard error (1.202) indicates the average deviation of observed Wt24 values from the predicted values, and the residuals appear to be fairly well distributed, with a slight skew towards positive values.</p>
+<p>Overall, the results confirm that Wt1 is a strong predictor of Wt24, but the moderate ^2 suggests that additional variables could improve the predictive power of the model. Future analyses may consider multiple regression approaches to incorporate sex, nutritional intake, or other early-life factors that might better explain the variability in infant growth over two years.</p>
+</section>
+<section id="residual-diagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="residual-diagnostics">Residual Diagnostics</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm_simple<span class="sc">$</span>fitted.values, lm_simple<span class="sc">$</span>residuals, <span class="at">main=</span><span class="st">"Residuals vs Fitted"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Fitted Values"</span>, <span class="at">ylab=</span><span class="st">"Residuals"</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(lm_simple<span class="sc">$</span>residuals, <span class="at">main=</span><span class="st">"Normal Q-Q Plot"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(lm_simple<span class="sc">$</span>residuals, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Group-work_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>Assumptions Checked:</strong> Linearity, normality, and homoscedasticity appear reasonable.</p>
+</section>
+<section id="multiple-regression-model-selection" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-regression-model-selection">Multiple Regression Model Selection</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>lm_multiple <span class="ot">&lt;-</span> <span class="fu">lm</span>(Wt24 <span class="sc">~</span> Wt1 <span class="sc">+</span> Sex <span class="sc">+</span> Solids, <span class="at">data =</span> data)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_multiple)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Wt24 ~ Wt1 + Sex + Solids, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.7324 -0.7632 -0.0949  0.8210  3.4366 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  6.01782    1.05004   5.731 8.99e-08 ***
+Wt1          1.58071    0.21297   7.422 2.69e-11 ***
+SexMale      0.55750    0.23890   2.334   0.0214 *  
+Solids      -0.05090    0.03699  -1.376   0.1716    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.176 on 109 degrees of freedom
+Multiple R-squared:  0.4536,    Adjusted R-squared:  0.4386 
+F-statistic: 30.16 on 3 and 109 DF,  p-value: 2.828e-14</code></pre>
+</div>
+</div>
+<p>The multiple regression model extends the previous simple linear regression by incorporating sex (Male/Female) and age at introduction to solids (Solids) as additional explanatory variables to predict weight at 24 months (Wt24). The estimated regression equation is:</p>
+<p><strong>Formula:</strong> [ Wt24 = _0 + _1 Wt1 + _2 Sex + _3 Solids + ]</p>
+<p>where the intercept represents the expected weight at 24 months for a female infant with a weight of 0 kg at 1 month and an undefined introduction age for solids, though this is not a practical scenario. The coefficient for Wt1 (1.5807, p-value = 2.69e-11) remains highly significant, confirming that weight at 1 month is still the strongest predictor of weight at 24 months, with each additional kilogram at 1 month leading to an expected increase of 1.58 kg at 24 months. The coefficient for Sex (0.5575, p-value = 0.0214) suggests that, on average, male infants weigh 0.56 kg more than female infants at 24 months, a statistically significant difference at the 5% level. This implies that sex plays a role in weight development during early infancy. The coefficient for Solids (-0.0509, p-value = 0.1716) is not statistically significant, indicating that the age at which solid foods were introduced does not have a strong linear effect on weight at 24 months. The negative coefficient suggests a slight downward trend, meaning infants introduced to solids earlier tend to weigh slightly more at 24 months, but the association is weak and could be influenced by other unmeasured factors.</p>
+<p>The Multiple ^2 value of 0.4536 indicates that the model explains 45.36% of the variance in Wt24, which is an improvement over the 41.9% explained by the simple regression model. The adjusted ^2 of 0.4386 accounts for the number of predictors and confirms that adding Sex and Solids improves the model, but only moderately. The residual standard error (1.176) is slightly lower than that of the simple model, suggesting a better overall fit.</p>
+<p>In conclusion, adding Sex as a predictor enhances the model, demonstrating that males tend to have a slightly higher weight at 24 months than females. However, Solids is not a significant predictor, suggesting that the age at which solid foods are introduced may not have a strong direct impact on weight at 24 months. While the multiple regression model performs better than the simple model, the Wt1 variable remains the dominant predictor, indicating that early-life weight is still the primary determinant of later weight development.</p>
+</section>
+<section id="model-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="model-comparison">Model Comparison</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(lm_simple, lm_multiple)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: Wt24 ~ Wt1
+Model 2: Wt24 ~ Wt1 + Sex + Solids
+  Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)  
+1    111 160.25                             
+2    109 150.70  2    9.5522 3.4545 0.0351 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Adding Sex and Solids improves model performance.</p>
+</section>
+<section id="weight-difference-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="weight-difference-analysis">Weight Difference Analysis</h2>
+<p>This analysis examines whether sex (male vs.&nbsp;female) significantly influences weight gain from 1 month to 24 months. The response variable is the difference in weight ( ΔWeight = Wt24 - Wt1), and the explanatory variable is Sex, coded as 0 for females and 1 for males.</p>
+<p>The analysis is conducted using:</p>
+<ol type="1">
+<li><p>A simple linear regression model to assess whether sex significantly affects weight gain.</p></li>
+<li><p>A two-sample t-test to independently compare the mean weight change between males and females.</p></li>
+<li><p>A 95% confidence interval (CI) to estimate the true mean difference in weight gain.</p></li>
+</ol>
+<p>We fit the following regression model:</p>
+<p><span class="math display">\[
+\Delta \text{Weight} = \beta_0 + \beta_1 \times \text{Sex} + \epsilon
+\]</span></p>
+<p>where:<br>
+- ( <span class="math inline">\(\beta_0\)</span> ) represents the <strong>average weight gain for female infants</strong>.<br>
+- ( <span class="math inline">\(\beta_1\)</span> ) represents the <strong>difference in weight gain between male and female infants</strong>.<br>
+- ( <span class="math inline">\(\epsilon\)</span> ) represents <strong>random error</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>lm_diff <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight_Diff <span class="sc">~</span> Sex, <span class="at">data =</span> data)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Weight_Diff ~ Sex, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.0239 -0.7939 -0.1286  0.6814  4.0114 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   7.8239     0.1746  44.803  &lt; 2e-16 ***
+SexMale       0.7847     0.2320   3.382 0.000995 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.222 on 111 degrees of freedom
+Multiple R-squared:  0.09341,   Adjusted R-squared:  0.08524 
+F-statistic: 11.44 on 1 and 111 DF,  p-value: 0.0009952</code></pre>
+</div>
+</div>
+<p>The regression output indicates:</p>
+<ul>
+<li><p><strong>Intercept</strong> (<span class="math inline">\(β_0\)</span>=7.8239): Female infants gain an estimated <strong>7.82 kg</strong> on average.</p></li>
+<li><p><strong>SexMale</strong> (<span class="math inline">\(β_1\)</span>=0.7847, p-value = <strong>0.000995</strong>): Male infants gain, on average, <strong>0.78 kg more</strong> than female infants. This difference is statistically significant at the <strong>0.001 level</strong>, providing strong evidence that male infants tend to gain more weight between 1 and 24 months.</p></li>
+</ul>
+<p>The model’s <span class="math inline">\(R^2\)</span>=0.0934 suggests that 9.34% of the variance in weight gain is explained by sex alone, indicating that sex plays a role but does not fully explain weight gain variations.</p>
+<p>To independently compare the mean weight gain between male and female infants, we conduct a two-sample t-test with the following hypotheses:</p>
+<ul>
+<li><p>Null hypothesis (<span class="math inline">\(H_0\)</span>): There is no difference in mean weight gain between males and females.</p></li>
+<li><p>Alternative hypothesis (<span class="math inline">\(H_A\)</span>): There is a significant difference in mean weight gain between males and females.</p></li>
+</ul>
+<p>A 95% confidence interval is constructed to estimate the true mean difference.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>t_test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Weight_Diff <span class="sc">~</span> Sex, <span class="at">data =</span> data, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>t_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  Weight_Diff by Sex
+t = -3.3818, df = 111, p-value = 0.0009952
+alternative hypothesis: true difference in means between group Female and group Male is not equal to 0
+95 percent confidence interval:
+ -1.2445211 -0.3249113
+sample estimates:
+mean in group Female   mean in group Male 
+            7.823878             8.608594 </code></pre>
+</div>
+</div>
+<p>To validate the regression results, a <strong>two-sample t-test</strong> was conducted to compare the mean weight gain between male and female infants. The test produced a <strong>t-value of -3.3818</strong> with <strong>111 degrees of freedom (df)</strong>, and the corresponding <strong>p-value was 0.0009952</strong>, which is well below the standard significance threshold of 0.05. This result provides strong evidence to reject the <strong>null hypothesis</strong>, confirming that there is a <strong>statistically significant difference</strong> in weight gain between male and female infants.</p>
+<p>The <strong>95% confidence interval (CI) for the mean difference</strong> in weight gain was estimated to be between <strong>-1.2445 kg and -0.3249 kg</strong>. This interval does not include zero, further supporting the conclusion that males and females do not gain weight at the same rate. The <strong>mean weight gain for female infants</strong> was <strong>7.8239 kg</strong>, while for <strong>male infants</strong>, it was <strong>8.6086 kg</strong>, indicating that male infants tend to gain more weight on average than female infants over the first two years of life.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm_diff<span class="sc">$</span>fitted.values, lm_diff<span class="sc">$</span>residuals, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Residuals vs Fitted"</span>, <span class="at">xlab=</span><span class="st">"Fitted Values"</span>, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Residuals"</span>, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">pch=</span><span class="dv">20</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(lm_diff<span class="sc">$</span>residuals, <span class="at">main=</span><span class="st">"Normal Q-Q Plot"</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(lm_diff<span class="sc">$</span>residuals, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Group-work_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Two residual diagnostic plots were examined:</p>
+<ol type="1">
+<li><p><strong>Residuals vs.&nbsp;Fitted Plot</strong>: The residuals appear to be <strong>randomly scattered</strong>, with no clear pattern, suggesting that the assumption of <strong>homoscedasticity (constant variance)</strong> is satisfied.</p></li>
+<li><p><strong>Normal Q-Q Plot</strong>: The residuals closely follow the <strong>theoretical normal line</strong>, with minor deviations at the extremes, indicating that the <strong>normality assumption</strong> is reasonably met.</p></li>
+</ol>
+<p>Overall, these diagnostics confirm that the model meets key regression assumptions and that the results can be interpreted with confidence.</p>
+<p>The analysis provides strong statistical evidence that male infants tend to gain more weight than female infants between 1 and 24 months, with an estimated additional weight gain of 0.78 kg on average. The two-sample t-test supports this conclusion, and the 95% confidence interval (-1.2445 kg to -0.3249 kg) further reinforces that this difference is unlikely due to random variation.</p>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

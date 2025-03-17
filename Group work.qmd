@@ -1,0 +1,247 @@
+---
+title: "Predicting Infant Weight at 24 Months Using Early Life Factors"
+author: "Haotian Liu"
+output:
+  html_document: default
+  pdf_document: default
+format: html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+```
+
+# Introduction
+
+Early childhood growth is an important indicator of future health outcomes. This study investigates a dataset from Queen Mother's Hospital, Glasgow, where 127 babies were monitored for weight progression at 1 month and 24 months. Additionally, the sex of each infant and the age at which solid foods were introduced were recorded. Understanding the factors influencing early weight gain can help in predicting future growth patterns and identifying potential health risks.
+
+We aim to answer:
+
+1.  **Can weight at 24 months (*Wt24*) be accurately predicted using weight at 1 month (*Wt1*)?**
+
+2.  **Does adding sex and/or the age at which solid foods were introduced improve prediction accuracy?**
+
+3.  **Is there a significant difference in weight gain between male and female infants?**
+
+# Exploratory Analysis
+
+## Data Import and Summary
+
+```{r}
+data <- read.csv("project1-growth-wt.csv")
+summary(data)
+```
+
+The dataset includes **weight at 1 month (Wt1)**, **weight at 24 months (Wt24)**, **sex**, and **age of introduction to solids (Solids)**.
+
+The **five-number summary** of *Wt24* by sex provides insight into the distribution of weights at 24 months.
+
+```{r}
+summary_table <- data %>%
+  group_by(Sex) %>%
+  summarise(Min = min(Wt24), 
+            Q1 = quantile(Wt24, 0.25), 
+            Median = median(Wt24), 
+            Q3 = quantile(Wt24, 0.75), 
+            Max = max(Wt24))
+kable(summary_table, caption = "Five-Number Summary of Wt24 by Sex")
+```
+
+## Scatterplot: Wt24 vs Wt1 by Sex
+
+```{r}
+ggplot(data, aes(x = Wt1, y = Wt24, color = Sex, shape = Sex)) +
+  geom_point(size = 3) +
+  labs(title = "Weight at 24 Months vs. Weight at 1 Month",
+       x = "Weight at 1 Month (kg)", y = "Weight at 24 Months (kg)") +
+  theme_minimal()
+
+```
+
+**Interpretation:** With points coloured and shaped according to sex, this scatterplot shows the association between weight at one month (Wt1) and weight at 24 months (Wt24). There is a clear positive correlation, indicating that infants who weigh more at 1 month generally continue to weigh more at 24 months. Male infants, represented by blue triangles, appear to be slightly more dispersed, with some reaching higher weights at 24 months, while female infants, shown as red circles, are more clustered within a lower-to-mid weight range. Although there is some variation between the sexes, this pattern indicates that early-life weight is a significant factor in determining long-term weight.
+
+## Boxplot: Weight Difference by Sex
+
+```{r}
+data <- data %>%
+  mutate(Weight_Diff = Wt24 - Wt1)
+
+ggplot(data, aes(x = Sex, y = Weight_Diff, fill = Sex)) +
+  geom_boxplot() +
+  labs(title = "Weight Change (Wt24 - Wt1) by Sex",
+       x = "Sex", y = "Weight Change (kg)") +
+  theme_minimal()
+```
+
+**Interpretation:** The boxplot compares the weight gain from 1 month to 24 months between male and female infants. Both groups exhibit similar median weight gains, but males show a slightly higher median value and a wider interquartile range, suggesting greater variability in their weight change. Additionally, there are a few outliers in both groups, indicating that some infants experienced significantly higher-than-average weight gain. While the overall distribution is comparable, this plot suggests that males may have slightly greater variation in weight gain, though the differences between male and female do not appear dramatic.
+
+## Scatterplot: Wt24 vs Solids by Sex
+
+```{r}
+ggplot(data, aes(x = Solids, y = Wt24, color = Sex)) +
+  geom_point(size = 3) +
+  labs(title = "Weight at 24 Months vs. Age of Introduction to Solids",
+       x = "Age at Introduction to Solids (months)", y = "Weight at 24 Months (kg)") +
+  theme_minimal()
+```
+
+Interpretation: The scatterplot examines whether the age at which infants were introduced to solid foods influences their weight at 24 months. The data points are widely spread, and no clear trend or strong linear relationship is evident, suggesting that the timing of solid food introduction does not have a substantial impact on later weight. Both male and female infants exhibit a broad range of weights across different ages of solid introduction, with some children introduced to solids early (\~4-6 months) showing high weights at 24 months, while others remain on the lower end of the spectrum. This suggests that other factors, such as overall nutrition, genes, and feeding habits beyond the introduction of solids, may play a more critical role in determining an infant's weight at two years old.
+
+## Summary Statistics by Sex
+
+```{r}
+data %>% group_by(Sex) %>% summarise(
+  Min = min(Wt24), Q1 = quantile(Wt24, 0.25), Median = median(Wt24),
+  Q3 = quantile(Wt24, 0.75), Max = max(Wt24)
+)
+```
+
+## Correlation Coefficients Matrix
+
+```{r}
+cor(data[, c("Wt1", "Wt24", "Solids")], use = "complete.obs")
+```
+
+**Interpretation:** Wt1 and Wt24 have a strong positive correlation.
+
+# Formal Analysis
+
+## Simple Linear Regression: Wt24 \~ Wt1
+
+```{r}
+lm_simple <- lm(Wt24 ~ Wt1, data = data)
+summary(lm_simple)
+
+```
+
+The simple linear regression model evaluates the relationship between weight at 1 month (Wt1) and weight at 24 months (Wt24), producing a highly significant result. The estimated regression equation is:
+
+**Formula:** \[ Wt24 = \beta\_0 + \beta\_1 Wt1 + \epsilon \]
+
+where the intercept ( \beta\_0=4.8159) represents the expected weight at 24 months for an infant with a weight of 0 kg at 1 month, though this is not meaningful in practice since no infants have zero weight. The coefficient for Wt1 ( \beta\_1 = 1.7960) is highly significant (p-value = 9.46e-15), indicating a strong positive association between Wt1 and Wt24. This means that for each additional kilogram of weight at 1 month, the expected weight at 24 months increases by approximately 1.80 kg.
+
+The model explains a moderate proportion of the variability in Wt24, as indicated by an \R\^2 value of 0.419. This means that about 41.9% of the variation in weight at 24 months is explained by weight at 1 month. While this suggests a strong relationship, a significant portion of the variance remains unexplained, implying that other factors (e.g., sex, feeding habits, genetic factors) may contribute to weight differences. The residual standard error (1.202) indicates the average deviation of observed Wt24 values from the predicted values, and the residuals appear to be fairly well distributed, with a slight skew towards positive values.
+
+Overall, the results confirm that Wt1 is a strong predictor of Wt24, but the moderate \R\^2 suggests that additional variables could improve the predictive power of the model. Future analyses may consider multiple regression approaches to incorporate sex, nutritional intake, or other early-life factors that might better explain the variability in infant growth over two years.
+
+## Residual Diagnostics
+
+```{r}
+par(mfrow=c(1,2))
+plot(lm_simple$fitted.values, lm_simple$residuals, main="Residuals vs Fitted",
+     xlab="Fitted Values", ylab="Residuals", col="blue")
+qqnorm(lm_simple$residuals, main="Normal Q-Q Plot")
+qqline(lm_simple$residuals, col="red")
+
+```
+
+**Assumptions Checked:** Linearity, normality, and homoscedasticity appear reasonable.
+
+## Multiple Regression Model Selection
+
+```{r}
+lm_multiple <- lm(Wt24 ~ Wt1 + Sex + Solids, data = data)
+summary(lm_multiple)
+
+```
+
+The multiple regression model extends the previous simple linear regression by incorporating sex (Male/Female) and age at introduction to solids (Solids) as additional explanatory variables to predict weight at 24 months (Wt24). The estimated regression equation is:
+
+**Formula:** \[ Wt24 = \beta\_0 + \beta\_1 Wt1 + \beta\_2 Sex + \beta\_3 Solids + \epsilon \]
+
+where the intercept represents the expected weight at 24 months for a female infant with a weight of 0 kg at 1 month and an undefined introduction age for solids, though this is not a practical scenario. The coefficient for Wt1 (1.5807, p-value = 2.69e-11) remains highly significant, confirming that weight at 1 month is still the strongest predictor of weight at 24 months, with each additional kilogram at 1 month leading to an expected increase of 1.58 kg at 24 months. The coefficient for Sex (0.5575, p-value = 0.0214) suggests that, on average, male infants weigh 0.56 kg more than female infants at 24 months, a statistically significant difference at the 5% level. This implies that sex plays a role in weight development during early infancy. The coefficient for Solids (-0.0509, p-value = 0.1716) is not statistically significant, indicating that the age at which solid foods were introduced does not have a strong linear effect on weight at 24 months. The negative coefficient suggests a slight downward trend, meaning infants introduced to solids earlier tend to weigh slightly more at 24 months, but the association is weak and could be influenced by other unmeasured factors.
+
+The Multiple \R\^2 value of 0.4536 indicates that the model explains 45.36% of the variance in Wt24, which is an improvement over the 41.9% explained by the simple regression model. The adjusted \R\^2 of 0.4386 accounts for the number of predictors and confirms that adding Sex and Solids improves the model, but only moderately. The residual standard error (1.176) is slightly lower than that of the simple model, suggesting a better overall fit.
+
+In conclusion, adding Sex as a predictor enhances the model, demonstrating that males tend to have a slightly higher weight at 24 months than females. However, Solids is not a significant predictor, suggesting that the age at which solid foods are introduced may not have a strong direct impact on weight at 24 months. While the multiple regression model performs better than the simple model, the Wt1 variable remains the dominant predictor, indicating that early-life weight is still the primary determinant of later weight development.
+
+## Model Comparison
+
+```{r}
+anova(lm_simple, lm_multiple)
+
+```
+
+**Interpretation:** Adding Sex and Solids improves model performance.
+
+## Weight Difference Analysis
+
+This analysis examines whether sex (male vs. female) significantly influences weight gain from 1 month to 24 months. The response variable is the difference in weight ( ΔWeight = Wt24 - Wt1), and the explanatory variable is Sex, coded as 0 for females and 1 for males.
+
+The analysis is conducted using:
+
+1.  A simple linear regression model to assess whether sex significantly affects weight gain.
+
+2.  A two-sample t-test to independently compare the mean weight change between males and females.
+
+3.  A 95% confidence interval (CI) to estimate the true mean difference in weight gain.
+
+We fit the following regression model:
+
+$$
+\Delta \text{Weight} = \beta_0 + \beta_1 \times \text{Sex} + \epsilon
+$$
+
+where:\
+- ( $\beta_0$ ) represents the **average weight gain for female infants**.\
+- ( $\beta_1$ ) represents the **difference in weight gain between male and female infants**.\
+- ( $\epsilon$ ) represents **random error**.
+
+```{r}
+lm_diff <- lm(Weight_Diff ~ Sex, data = data)
+summary(lm_diff)
+
+```
+
+The regression output indicates:
+
+-   **Intercept** ($β_0$=7.8239): Female infants gain an estimated **7.82 kg** on average.
+
+-   **SexMale** ($β_1$=0.7847, p-value = **0.000995**): Male infants gain, on average, **0.78 kg more** than female infants. This difference is statistically significant at the **0.001 level**, providing strong evidence that male infants tend to gain more weight between 1 and 24 months.
+
+The model's $R^2$=0.0934 suggests that 9.34% of the variance in weight gain is explained by sex alone, indicating that sex plays a role but does not fully explain weight gain variations.
+
+To independently compare the mean weight gain between male and female infants, we conduct a two-sample t-test with the following hypotheses:
+
+-   Null hypothesis ($H_0$): There is no difference in mean weight gain between males and females.
+
+-   Alternative hypothesis ($H_A$): There is a significant difference in mean weight gain between males and females.
+
+A 95% confidence interval is constructed to estimate the true mean difference.
+
+```{r}
+t_test <- t.test(Weight_Diff ~ Sex, data = data, var.equal = TRUE)
+t_test
+
+```
+
+To validate the regression results, a **two-sample t-test** was conducted to compare the mean weight gain between male and female infants. The test produced a **t-value of -3.3818** with **111 degrees of freedom (df)**, and the corresponding **p-value was 0.0009952**, which is well below the standard significance threshold of 0.05. This result provides strong evidence to reject the **null hypothesis**, confirming that there is a **statistically significant difference** in weight gain between male and female infants.
+
+The **95% confidence interval (CI) for the mean difference** in weight gain was estimated to be between **-1.2445 kg and -0.3249 kg**. This interval does not include zero, further supporting the conclusion that males and females do not gain weight at the same rate. The **mean weight gain for female infants** was **7.8239 kg**, while for **male infants**, it was **8.6086 kg**, indicating that male infants tend to gain more weight on average than female infants over the first two years of life.
+
+```{r}
+par(mfrow=c(1,2))
+plot(lm_diff$fitted.values, lm_diff$residuals, 
+     main="Residuals vs Fitted", xlab="Fitted Values", 
+     ylab="Residuals", col="blue", pch=20)
+abline(h=0, col="red", lwd=2)
+
+qqnorm(lm_diff$residuals, main="Normal Q-Q Plot")
+qqline(lm_diff$residuals, col="red")
+
+```
+
+Two residual diagnostic plots were examined:
+
+1.  **Residuals vs. Fitted Plot**: The residuals appear to be **randomly scattered**, with no clear pattern, suggesting that the assumption of **homoscedasticity (constant variance)** is satisfied.
+
+2.  **Normal Q-Q Plot**: The residuals closely follow the **theoretical normal line**, with minor deviations at the extremes, indicating that the **normality assumption** is reasonably met.
+
+Overall, these diagnostics confirm that the model meets key regression assumptions and that the results can be interpreted with confidence.
+
+The analysis provides strong statistical evidence that male infants tend to gain more weight than female infants between 1 and 24 months, with an estimated additional weight gain of 0.78 kg on average. The two-sample t-test supports this conclusion, and the 95% confidence interval (-1.2445 kg to -0.3249 kg) further reinforces that this difference is unlikely due to random variation.
+
+# Conclusion

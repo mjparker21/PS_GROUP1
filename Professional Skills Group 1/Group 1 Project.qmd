@@ -5,13 +5,21 @@ format: html
 editor: visual
 ---
 
-## Introduction 
+## Introduction
 
-Steadily increasing weight is an indicator that a baby is healthy. Weight change differs between children, so it is of interest to know what factors influence a child's weight gain. A study conducted at the Queen Mothers hospital in Glasgow sampled 127 new born babies and aims to investigate nutritional status at birth and early infancy and collected the following variables:
+Steadily increasing weight is an indicator of a healthy child. Weight change differs between children, so it is of interest to know what factors influence a child's weight. A study conducted at the Queen Mothers hospital in Glasgow sampled 127 new born babies gathered the following variables:
 
-`Sex`  - The child's sex (categorical variable,
+`Wt24`  - The child's weight at 24 months (numerical variable, continuous).
 
-Here we shall assess the performance of weight at 1 month as a predictor of weight at 24 months. Moreover, we shall consider if a child's sex and age at which they where introduced to solid foods are further explanatory variables of weight at 24 months. After which we see if the child's difference in weight from 1 month to 24 months differs by the child's sex.
+`Wt1`  - The child's weight at 1 month (numerical variable, continuous).
+
+`Solids`  - The age at which the child was first introduced to solid food (numerical variable, discrete).
+
+`Sex` - The child's sex (categorical variable, with categories Male or Female).
+
+The goal of this report is to examine which variables influence `Wt24` first by assessing how well `Wt24` can be predicted using a linear model with `Wt1` as an explanatory variable. We then see if the model if improved by adding `Sex` or `Solids` to the model. Finally, we see if there is any evidence that the difference in weight (`Wt24`  - `Wt1`) is different for male and female children.
+
+@sec-exploratory consists of exploratory analysis explores the potential relationships between variables by use of data visualisation and numerical summaries. @sec-formalanalysis uses linear regression modelling to answer the questions of interest. @sec-conclusion summarisises the findings of the report as well as discuss some limitations of the study.
 
 ```{r}
 #| echo: false
@@ -31,21 +39,68 @@ data <- read.csv("~/Downloads/project1-growth-wt.csv")
 
 ```
 
-## Exploratory Analysis
+## Exploratory Analysis {#sec-exploratory}
 
 ```{r}
 #| echo: false
-#| fig-cap: Relationship between child weight at 24 months and weight at 1 month by sex
+#| warning: false
+#| fig-cap: Relationship between Wt24 and numerical explanatory variables coloured by sex
+#| fig-subcap: 
+#| - Relationship between weight at 24 months and weight at 1 month, coloured by sex
+#| - Relationship between weight at 24 months and age at introduction to solids, coloured by sex
 #| label: fig-scat-wt24-wt1
+#| layout-ncol: 2
 #| fig-align: center
 #| fig-width: 4.5
 #| fig-height: 3.5
-ggplot(data, aes(x = Wt1, y = Wt24, color = Sex)) +
-  geom_point() +
-  labs(x = "Weight at 1 month (kg)", y = "Weight at 24 months (kg)", color = "Sex")
+#| fig-cap-location: top
+PlotWt1 <-  ggplot(data, aes(x = Wt1, y = Wt24, color = Sex)) +
+           geom_point() +
+          labs(x = "Weight at 1 month (kg)", y = "Weight at 24 months (kg)", color = "Sex") +             theme_minimal()
+
+PlotSolids <- ggplot(data, aes(x = Solids, y = Wt24, color = Sex)) +
+               geom_point() +
+                geom_smooth(method = "lm", se = FALSE) + 
+                labs(
+                 x = "Age (Months) at Introduction to Solids",
+                  y = "Weight at 24 Months (kg)",
+                  color = "Sex") +
+                  theme_minimal()
+
+PlotWt1
+PlotSolids
 ```
 
-@fig-scat-wt24-wt1 shows the relationship between the child's weight at 24 months against the child's weight at 1 month. From @fig-scat-wt24-wt1 it appears that there is a positive, moderate to strong linear relationship between a child's weight at 24 months and weight at 1 month. Moreover, with the exception of a few points there appears to be a distinction by gender with female children having lower weight and male children having a higher weight.
+@fig-scat-wt24-wt1 shows the relationship between the response `Wt24` and explanatory variables, namely `Wt1` and `Solids`. From @fig-scat-wt24-wt1-1 it appears that there is a positive, moderate to strong linear relationship between `Wt24` and `Wt1`. Moreover, with the exception of a few points there appears to be a distinction by `Sex` with female children having lower weight and male children having a higher weight. @fig-scat-wt24-wt1-2 illustrates the relationship between `Wt24` and `Solids`, with separate regression lines for males and females. The plot suggests a moderate negative linear relationship for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weak relationship between `Wt24` and `Solids` for male children.
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-cap: Boxplots of weight at 24 months and weight at 1 month by sex
+#| fig-subcap: 
+#| - Distribution of weight at 1 month by sex
+#| - Distribution of wight at 24 months by sex
+#| label: fig-boxplots
+#| layout-ncol: 2
+#| fig-align: center
+#| fig-width: 4.5
+#| fig-height: 3.5
+#| fig-cap-location: top
+
+Wt24.boxplot <- ggplot(data, aes(x = Sex, y = Wt24, fill = Sex)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(x = "Sex", y = "Weight (kg)") +
+  theme_minimal()
+
+Wt1.Boxplot <- ggplot(data, aes(x = Sex, y = Wt1, fill = Sex)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(x = "Sex", y = "Weight (kg)") +
+  theme_minimal()
+Wt1.Boxplot
+Wt24.boxplot
+```
+
+@fig-boxplots-1 presents a boxplot illustrating the distribution of `Wt1` categorised by `Sex`. The plot suggests that male children tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution. @fig-boxplots-2 extends this analysis to `Wt24`, where the observed trend continues. Male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.
 
 ```{r}
 #| echo: false
@@ -62,7 +117,7 @@ cors.female <- data |> filter(,Sex=="Female") |> correlate(,diagonal = 1)
 #|  - Correlations for numerical variables for male children
 #|  - Correlations for numerical variables for female children
 #| layout-ncol: 2
-#| tbl-cap-location: bottom
+#| tbl-cap-location: top
 #| label: tbl-corrs
 
 # Male table
@@ -82,7 +137,7 @@ male_table
 female_table
 ```
 
-@tbl-corrs shows the correlation between numerical variables for male and female children. From @tbl-corrs-1 we can see that for males Wt1 and Wt24 are moderately, positivly correlated, whereas Solids against Wt24 and Wt1 are weakly negatively correlated. @tbl-corrs-2 highlights that this is slightly different for female children as there appears to be a higher positive correlation between Wt24 and Wt1. Additionally, there appears to be a moderate negative correlation between Solids and Wt24 for female children and a weak-moderate correlation between Solids and Wt1. This suggests that there may be an interaction between Wt1 and Solids by Sex.
+@tbl-corrs shows the correlation between numerical variables for male and female children. For male children @tbl-corrs-1 highlights that for male children `Wt1` and `Wt24` are moderately, positivley correlated, whereas `Solids` against `Wt24` and `Wt1` are weakly negatively correlated. This is slightly different for female children as from @tbl-corrs-2 there appears to be a higher positive correlation between `Wt24` and `Wt1`. Additionally, there appears to be a moderate negative correlation between `Solids` and `Wt24` for female children and a weak-moderate correlation between `Solids` and `Wt1`.
 
 ```{r}
 #| echo: false
@@ -126,70 +181,14 @@ data |>
   )
 ```
 
-@tbl-summary shows the mean, median and standard deviation of Wt24, Wt1 and Solids by Sex. @tbl-summary highlights that there appears to be a slight difference between Wt24 by sex. Additionally, There does not appear to be a difference in Wt1 and Solids by sex.
+@tbl-summary shows the mean, median and standard deviation of `Wt24`, `Wt1` and `Solids` by `Sex`. On average, there appears to be a slight difference in `Wt24` and `Wt1`by `Sex`. There does not appear to be a difference in `Solids` by `Sex` on average.
 
+## Formal Analysis  {#sec-formalanalysis}
 
+## Conclusion {#sec-conclusion}
 
-```{r}
-#| echo: false
-#| fig-cap: Distribution of weight at 1 month by sex
-#| label: fig-box-wt1
-#| fig-align: center
-#| fig-width: 5
-#| fig-height: 4
+## References
 
-ggplot(data, aes(x = Sex, y = Wt1, fill = Sex)) +
-  geom_boxplot(alpha = 0.7) +
-  labs(title = "Weight at 1 Month by Sex", x = "Sex", y = "Weight (kg)") +
-  theme_minimal()
-```
+-   <https://www.nhs.uk/conditions/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/>
 
-@fig-box-wt1 presents a boxplot illustrating the distribution of weight at 1 month categorized by sex. The plot suggests that male infants tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution.
-
-```{r}
-#| echo: false
-#| fig-cap: Distribution of weight at 24 months by sex
-#| label: fig-box-wt24
-#| fig-align: center
-#| fig-width: 5
-#| fig-height: 4
-
-ggplot(data, aes(x = Sex, y = Wt24, fill = Sex)) +
-  geom_boxplot(alpha = 0.7) +
-  labs(title = "Weight at 24 Months by Sex", x = "Sex", y = "Weight (kg)") +
-  theme_minimal()
-
-```
-
-@fig-box-wt24 extends this analysis to weight at 24 months, where the observed trend continues. Male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.
-
-
-
-```{r}
-#| echo: false
-#| warning: false
-#| fig-cap: Relationship between weight at 24 months and age at introduction to solids, colored by sex
-#| label: fig-scat-wt24-solids
-#| fig-align: center
-#| fig-width: 5
-#| fig-height: 4
-
-ggplot(data, aes(x = Solids, y = Wt24, color = Sex)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) + 
-  labs(title = "Weight at 24 Months vs. Age at Introduction to Solids",
-    x = "Age (Months) at Introduction to Solids",
-    y = "Weight at 24 Months (kg)",
-    color = "Sex") +
-  theme_minimal()
-
-```
-
-@fig-scat-wt24-solids illustrates the relationship between weight at 24 months (Wt24) and the age at which solid foods were introduced (Solids), with separate regression lines for males and females. The plot suggests a slight negative trend for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weaker or negligible relationship between solid food introduction and weight at 24 months for male children. 
-
-## References 
-
-<https://www.nhs.uk/conditions/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/>
-
-<https://www.babycenter.com/baby/baby-development/average-weight-and-growth-chart-for-babies-toddlers-and-beyo_10357633>
-
+-   <https://www.babycenter.com/baby/baby-development/average-weight-and-growth-chart-for-babies-toddlers-and-beyo_10357633>

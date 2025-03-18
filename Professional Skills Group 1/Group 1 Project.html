@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.40">
+<meta name="generator" content="quarto-1.4.549">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -30,10 +30,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="Group 1 Project_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="Group 1 Project_files/libs/quarto-html/anchor.min.js"></script>
 <link href="Group 1 Project_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Group 1 Project_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="Group 1 Project_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="Group 1 Project_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Group 1 Project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Group 1 Project_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="Group 1 Project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -69,45 +69,115 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="exploratory-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="exploratory-analysis">Exploratory Analysis</h2>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-scat-wt24-wt1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Steadily increasing weight is an indicator of a healthy child. Weight change differs between children, so it is of interest to know what factors influence a child’s weight. A study conducted at the Queen Mothers hospital in Glasgow sampled 127 new born babies gathered the following variables:</p>
+<p><code>Wt24</code> - The child’s weight at 24 months (numerical variable, continuous).</p>
+<p><code>Wt1</code> - The child’s weight at 1 month (numerical variable, continuous).</p>
+<p><code>Solids</code> - The age at which the child was first introduced to solid food (numerical variable, discrete).</p>
+<p><code>Sex</code> - The child’s sex (categorical variable, with categories Male or Female).</p>
+<p>The goal of this report is to examine which variables influence <code>Wt24</code> first by assessing how well <code>Wt24</code> can be predicted using a linear model with <code>Wt1</code> as an explanatory variable. We then see if the model if improved by adding <code>Sex</code> or <code>Solids</code> to the model. Finally, we see if there is any evidence that the difference in weight (<code>Wt24</code> - <code>Wt1</code>) is different for male and female children.</p>
+<p><a href="#sec-exploratory" class="quarto-xref">Section&nbsp;2</a> consists of exploratory analysis explores the potential relationships between variables by use of data visualisation and numerical summaries. <a href="#sec-formalanalysis" class="quarto-xref">Section&nbsp;3</a> uses linear regression modelling to answer the questions of interest. <a href="#sec-conclusion" class="quarto-xref">Section&nbsp;4</a> summarisises the findings of the report as well as discuss some limitations of the study.</p>
+</section>
+<section id="sec-exploratory" class="level2">
+<h2 class="anchored" data-anchor-id="sec-exploratory">Exploratory Analysis</h2>
+<div id="fig-scat-wt24-wt1" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-scat-wt24-wt1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Relationship between Wt24 and numerical explanatory variables coloured by sex
+</figcaption>
 <div aria-describedby="fig-scat-wt24-wt1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="Group-1-Project_files/figure-html/fig-scat-wt24-wt1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="432">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-scat-wt24-wt1" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-scat-wt24-wt1-1" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-scat-wt24-wt1-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-scat-wt24-wt1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-ref-parent="fig-scat-wt24-wt1" width="432">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scat-wt24-wt1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 month by sex
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-scat-wt24-wt1-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Relationship between weight at 24 months and weight at 1 month, coloured by sex
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-scat-wt24-wt1" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-scat-wt24-wt1-2" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-scat-wt24-wt1-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-scat-wt24-wt1-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-ref-parent="fig-scat-wt24-wt1" width="432">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-scat-wt24-wt1-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Relationship between weight at 24 months and age at introduction to solids, coloured by sex
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-scat-wt24-wt1" class="quarto-xref">Figure&nbsp;1</a> shows the relationship between the child’s weight at 24 months against the child’s weight at 1 month. From <a href="#fig-scat-wt24-wt1" class="quarto-xref">Figure&nbsp;1</a> it appears that there is a positive, moderate to strong linear relationship between a child’s weight at 24 months and weight at 1 month. Moreover, with the exception of a few points there appears to be a distinction by gender with female children having lower weight and male children having a higher weight.</p>
+</div>
+</figure>
+</div>
+<p><a href="#fig-scat-wt24-wt1" class="quarto-xref">Figure&nbsp;1</a> shows the relationship between the response <code>Wt24</code> and explanatory variables, namely <code>Wt1</code> and <code>Solids</code>. From <a href="#fig-scat-wt24-wt1-1" class="quarto-xref">Figure&nbsp;1 (a)</a> it appears that there is a positive, moderate to strong linear relationship between <code>Wt24</code> and <code>Wt1</code>. Moreover, with the exception of a few points there appears to be a distinction by <code>Sex</code> with female children having lower weight and male children having a higher weight. <a href="#fig-scat-wt24-wt1-2" class="quarto-xref">Figure&nbsp;1 (b)</a> illustrates the relationship between <code>Wt24</code> and <code>Solids</code>, with separate regression lines for males and females. The plot suggests a moderate negative linear relationship for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weak relationship between <code>Wt24</code> and <code>Solids</code> for male children.</p>
+<div id="fig-boxplots" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-boxplots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Boxplots of weight at 24 months and weight at 1 month by sex
+</figcaption>
+<div aria-describedby="fig-boxplots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-boxplots" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-boxplots-1" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-boxplots-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-boxplots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-ref-parent="fig-boxplots" width="432">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-boxplots-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Distribution of weight at 1 month by sex
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-boxplots" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-boxplots-2" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-boxplots-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-boxplots-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-ref-parent="fig-boxplots" width="432">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-boxplots-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Distribution of wight at 24 months by sex
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p><a href="#fig-boxplots-1" class="quarto-xref">Figure&nbsp;2 (a)</a> presents a boxplot illustrating the distribution of <code>Wt1</code> categorised by <code>Sex</code>. The plot suggests that male children tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution. <a href="#fig-boxplots-2" class="quarto-xref">Figure&nbsp;2 (b)</a> extends this analysis to <code>Wt24</code>, where the observed trend continues. Male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.</p>
 <div id="tbl-corrs" class="quarto-layout-panel anchored">
 <figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-corrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Correlations between numerical variables by sex
+</figcaption>
 <div aria-describedby="tbl-corrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-corrs" style="flex-basis: 50.0%;justify-content: center;">
-<div id="ejmalanwvk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ejmalanwvk table {
+<div id="weldqepelm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#weldqepelm table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ejmalanwvk thead, #ejmalanwvk tbody, #ejmalanwvk tfoot, #ejmalanwvk tr, #ejmalanwvk td, #ejmalanwvk th {
+#weldqepelm thead, #weldqepelm tbody, #weldqepelm tfoot, #weldqepelm tr, #weldqepelm td, #weldqepelm th {
   border-style: none;
 }
 
-#ejmalanwvk p {
+#weldqepelm p {
   margin: 0;
   padding: 0;
 }
 
-#ejmalanwvk .gt_table {
+#weldqepelm .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -133,12 +203,12 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-left-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_caption {
+#weldqepelm .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ejmalanwvk .gt_title {
+#weldqepelm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -150,7 +220,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-bottom-width: 0;
 }
 
-#ejmalanwvk .gt_subtitle {
+#weldqepelm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -162,7 +232,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-top-width: 0;
 }
 
-#ejmalanwvk .gt_heading {
+#weldqepelm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -174,13 +244,13 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-right-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_bottom_border {
+#weldqepelm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_col_headings {
+#weldqepelm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -195,7 +265,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-right-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_col_heading {
+#weldqepelm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -215,7 +285,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   overflow-x: hidden;
 }
 
-#ejmalanwvk .gt_column_spanner_outer {
+#weldqepelm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -227,15 +297,15 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 4px;
 }
 
-#ejmalanwvk .gt_column_spanner_outer:first-child {
+#weldqepelm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ejmalanwvk .gt_column_spanner_outer:last-child {
+#weldqepelm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ejmalanwvk .gt_column_spanner {
+#weldqepelm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -247,11 +317,11 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   width: 100%;
 }
 
-#ejmalanwvk .gt_spanner_row {
+#weldqepelm .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ejmalanwvk .gt_group_heading {
+#weldqepelm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -277,7 +347,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   text-align: left;
 }
 
-#ejmalanwvk .gt_empty_group_heading {
+#weldqepelm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -292,15 +362,15 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   vertical-align: middle;
 }
 
-#ejmalanwvk .gt_from_md > :first-child {
+#weldqepelm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ejmalanwvk .gt_from_md > :last-child {
+#weldqepelm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ejmalanwvk .gt_row {
+#weldqepelm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -319,7 +389,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   overflow-x: hidden;
 }
 
-#ejmalanwvk .gt_stub {
+#weldqepelm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -332,7 +402,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#ejmalanwvk .gt_stub_row_group {
+#weldqepelm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -346,15 +416,15 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   vertical-align: top;
 }
 
-#ejmalanwvk .gt_row_group_first td {
+#weldqepelm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ejmalanwvk .gt_row_group_first th {
+#weldqepelm .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ejmalanwvk .gt_summary_row {
+#weldqepelm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -364,16 +434,16 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#ejmalanwvk .gt_first_summary_row {
+#weldqepelm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_first_summary_row.thick {
+#weldqepelm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ejmalanwvk .gt_last_summary_row {
+#weldqepelm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -383,7 +453,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-bottom-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_grand_summary_row {
+#weldqepelm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -393,7 +463,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#ejmalanwvk .gt_first_grand_summary_row {
+#weldqepelm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -403,7 +473,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-top-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_last_grand_summary_row_top {
+#weldqepelm .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -413,11 +483,11 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-bottom-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_striped {
+#weldqepelm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ejmalanwvk .gt_table_body {
+#weldqepelm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -426,7 +496,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-bottom-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_footnotes {
+#weldqepelm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -440,7 +510,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-right-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_footnote {
+#weldqepelm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -449,7 +519,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#ejmalanwvk .gt_sourcenotes {
+#weldqepelm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -463,7 +533,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-right-color: #D3D3D3;
 }
 
-#ejmalanwvk .gt_sourcenote {
+#weldqepelm .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -471,85 +541,76 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#ejmalanwvk .gt_left {
+#weldqepelm .gt_left {
   text-align: left;
 }
 
-#ejmalanwvk .gt_center {
+#weldqepelm .gt_center {
   text-align: center;
 }
 
-#ejmalanwvk .gt_right {
+#weldqepelm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ejmalanwvk .gt_font_normal {
+#weldqepelm .gt_font_normal {
   font-weight: normal;
 }
 
-#ejmalanwvk .gt_font_bold {
+#weldqepelm .gt_font_bold {
   font-weight: bold;
 }
 
-#ejmalanwvk .gt_font_italic {
+#weldqepelm .gt_font_italic {
   font-style: italic;
 }
 
-#ejmalanwvk .gt_super {
+#weldqepelm .gt_super {
   font-size: 65%;
 }
 
-#ejmalanwvk .gt_footnote_marks {
+#weldqepelm .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ejmalanwvk .gt_asterisk {
+#weldqepelm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ejmalanwvk .gt_indent_1 {
+#weldqepelm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ejmalanwvk .gt_indent_2 {
+#weldqepelm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ejmalanwvk .gt_indent_3 {
+#weldqepelm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ejmalanwvk .gt_indent_4 {
+#weldqepelm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ejmalanwvk .gt_indent_5 {
+#weldqepelm .gt_indent_5 {
   text-indent: 25px;
-}
-
-#ejmalanwvk .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#ejmalanwvk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
 }
 </style>
 
-<div id="tbl-corrs-1" class="gt_table do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-disable-processing="false" data-quarto-postprocess="true" data-quarto-bootstrap="false">
+<div id="tbl-corrs-1" class="gt_table do-not-create-environment quarto-float anchored" data-quarto-bootstrap="false" data-quarto-disable-processing="false" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-corrs-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Correlations for numerical variables for male children
 </figcaption>
 <div aria-describedby="tbl-corrs-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="tbl-corrs-1" class="gt_table do-not-create-environment caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table id="tbl-corrs-1" class="gt_table do-not-create-environment table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings header">
+<tr class="header gt_col_headings">
 <th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold;" scope="col">term</th>
 <th id="Wt1" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold;" scope="col">Wt1</th>
 <th id="Wt24" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold;" scope="col">Wt24</th>
@@ -584,23 +645,23 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-corrs" style="flex-basis: 50.0%;justify-content: center;">
-<div id="zntdntxzsn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zntdntxzsn table {
+<div id="kfhtdilcfo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kfhtdilcfo table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zntdntxzsn thead, #zntdntxzsn tbody, #zntdntxzsn tfoot, #zntdntxzsn tr, #zntdntxzsn td, #zntdntxzsn th {
+#kfhtdilcfo thead, #kfhtdilcfo tbody, #kfhtdilcfo tfoot, #kfhtdilcfo tr, #kfhtdilcfo td, #kfhtdilcfo th {
   border-style: none;
 }
 
-#zntdntxzsn p {
+#kfhtdilcfo p {
   margin: 0;
   padding: 0;
 }
 
-#zntdntxzsn .gt_table {
+#kfhtdilcfo .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -626,12 +687,12 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-left-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_caption {
+#kfhtdilcfo .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zntdntxzsn .gt_title {
+#kfhtdilcfo .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -643,7 +704,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-bottom-width: 0;
 }
 
-#zntdntxzsn .gt_subtitle {
+#kfhtdilcfo .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -655,7 +716,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-top-width: 0;
 }
 
-#zntdntxzsn .gt_heading {
+#kfhtdilcfo .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -667,13 +728,13 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-right-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_bottom_border {
+#kfhtdilcfo .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_col_headings {
+#kfhtdilcfo .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -688,7 +749,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-right-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_col_heading {
+#kfhtdilcfo .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -708,7 +769,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   overflow-x: hidden;
 }
 
-#zntdntxzsn .gt_column_spanner_outer {
+#kfhtdilcfo .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -720,15 +781,15 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 4px;
 }
 
-#zntdntxzsn .gt_column_spanner_outer:first-child {
+#kfhtdilcfo .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zntdntxzsn .gt_column_spanner_outer:last-child {
+#kfhtdilcfo .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zntdntxzsn .gt_column_spanner {
+#kfhtdilcfo .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -740,11 +801,11 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   width: 100%;
 }
 
-#zntdntxzsn .gt_spanner_row {
+#kfhtdilcfo .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zntdntxzsn .gt_group_heading {
+#kfhtdilcfo .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -770,7 +831,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   text-align: left;
 }
 
-#zntdntxzsn .gt_empty_group_heading {
+#kfhtdilcfo .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -785,15 +846,15 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   vertical-align: middle;
 }
 
-#zntdntxzsn .gt_from_md > :first-child {
+#kfhtdilcfo .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zntdntxzsn .gt_from_md > :last-child {
+#kfhtdilcfo .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zntdntxzsn .gt_row {
+#kfhtdilcfo .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -812,7 +873,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   overflow-x: hidden;
 }
 
-#zntdntxzsn .gt_stub {
+#kfhtdilcfo .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -825,7 +886,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#zntdntxzsn .gt_stub_row_group {
+#kfhtdilcfo .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -839,15 +900,15 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   vertical-align: top;
 }
 
-#zntdntxzsn .gt_row_group_first td {
+#kfhtdilcfo .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zntdntxzsn .gt_row_group_first th {
+#kfhtdilcfo .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zntdntxzsn .gt_summary_row {
+#kfhtdilcfo .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -857,16 +918,16 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#zntdntxzsn .gt_first_summary_row {
+#kfhtdilcfo .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_first_summary_row.thick {
+#kfhtdilcfo .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zntdntxzsn .gt_last_summary_row {
+#kfhtdilcfo .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -876,7 +937,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-bottom-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_grand_summary_row {
+#kfhtdilcfo .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -886,7 +947,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#zntdntxzsn .gt_first_grand_summary_row {
+#kfhtdilcfo .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -896,7 +957,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-top-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_last_grand_summary_row_top {
+#kfhtdilcfo .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -906,11 +967,11 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-bottom-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_striped {
+#kfhtdilcfo .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zntdntxzsn .gt_table_body {
+#kfhtdilcfo .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -919,7 +980,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-bottom-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_footnotes {
+#kfhtdilcfo .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -933,7 +994,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-right-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_footnote {
+#kfhtdilcfo .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -942,7 +1003,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#zntdntxzsn .gt_sourcenotes {
+#kfhtdilcfo .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -956,7 +1017,7 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   border-right-color: #D3D3D3;
 }
 
-#zntdntxzsn .gt_sourcenote {
+#kfhtdilcfo .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -964,85 +1025,76 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
   padding-right: 5px;
 }
 
-#zntdntxzsn .gt_left {
+#kfhtdilcfo .gt_left {
   text-align: left;
 }
 
-#zntdntxzsn .gt_center {
+#kfhtdilcfo .gt_center {
   text-align: center;
 }
 
-#zntdntxzsn .gt_right {
+#kfhtdilcfo .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zntdntxzsn .gt_font_normal {
+#kfhtdilcfo .gt_font_normal {
   font-weight: normal;
 }
 
-#zntdntxzsn .gt_font_bold {
+#kfhtdilcfo .gt_font_bold {
   font-weight: bold;
 }
 
-#zntdntxzsn .gt_font_italic {
+#kfhtdilcfo .gt_font_italic {
   font-style: italic;
 }
 
-#zntdntxzsn .gt_super {
+#kfhtdilcfo .gt_super {
   font-size: 65%;
 }
 
-#zntdntxzsn .gt_footnote_marks {
+#kfhtdilcfo .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zntdntxzsn .gt_asterisk {
+#kfhtdilcfo .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zntdntxzsn .gt_indent_1 {
+#kfhtdilcfo .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zntdntxzsn .gt_indent_2 {
+#kfhtdilcfo .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zntdntxzsn .gt_indent_3 {
+#kfhtdilcfo .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zntdntxzsn .gt_indent_4 {
+#kfhtdilcfo .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zntdntxzsn .gt_indent_5 {
+#kfhtdilcfo .gt_indent_5 {
   text-indent: 25px;
-}
-
-#zntdntxzsn .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#zntdntxzsn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
 }
 </style>
 
-<div id="tbl-corrs-2" class="gt_table do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-disable-processing="false" data-quarto-postprocess="true" data-quarto-bootstrap="false">
+<div id="tbl-corrs-2" class="gt_table do-not-create-environment quarto-float anchored" data-quarto-bootstrap="false" data-quarto-disable-processing="false" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-corrs-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Correlations for numerical variables for female children
 </figcaption>
 <div aria-describedby="tbl-corrs-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="tbl-corrs-2" class="gt_table do-not-create-environment caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table id="tbl-corrs-2" class="gt_table do-not-create-environment table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings header">
+<tr class="header gt_col_headings">
 <th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold;" scope="col">term</th>
 <th id="Wt1" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold;" scope="col">Wt1</th>
 <th id="Wt24" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold;" scope="col">Wt24</th>
@@ -1078,37 +1130,34 @@ Figure&nbsp;1: Relationship between child weight at 24 months and weight at 1 mo
 </div>
 </div>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl" id="tbl-corrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Correlations between numerical variables by sex
-</figcaption>
 </figure>
 </div>
-<p><a href="#tbl-corrs" class="quarto-xref">Table&nbsp;1</a> shows the correlation between numerical variables for male and female children. From <a href="#tbl-corrs-1" class="quarto-xref">Table&nbsp;1 (a)</a> we can see that for males Wt1 and Wt24 are moderately, positivly correlated, whereas Solids against Wt24 and Wt1 are weakly negatively correlated. <a href="#tbl-corrs-2" class="quarto-xref">Table&nbsp;1 (b)</a> highlights that this is slightly different for female children as there appears to be a higher positive correlation between Wt24 and Wt1. Additionally, there appears to be a moderate negative correlation between Solids and Wt24 for female children and a weak-moderate correlation between Solids and Wt1. This suggests that there may be an interaction between Wt1 and Solids by Sex.</p>
+<p><a href="#tbl-corrs" class="quarto-xref">Table&nbsp;1</a> shows the correlation between numerical variables for male and female children. For male children <a href="#tbl-corrs-1" class="quarto-xref">Table&nbsp;1 (a)</a> highlights that for male children <code>Wt1</code> and <code>Wt24</code> are moderately, positivley correlated, whereas <code>Solids</code> against <code>Wt24</code> and <code>Wt1</code> are weakly negatively correlated. This is slightly different for female children as from <a href="#tbl-corrs-2" class="quarto-xref">Table&nbsp;1 (b)</a> there appears to be a higher positive correlation between <code>Wt24</code> and <code>Wt1</code>. Additionally, there appears to be a moderate negative correlation between <code>Solids</code> and <code>Wt24</code> for female children and a weak-moderate correlation between <code>Solids</code> and <code>Wt1</code>.</p>
 <div class="cell">
-<div id="tbl-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<div id="tbl-summary" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by sex.
 </figcaption>
 <div aria-describedby="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="hsqkrdaqwf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hsqkrdaqwf table {
+<div id="cjlrabhivw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cjlrabhivw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hsqkrdaqwf thead, #hsqkrdaqwf tbody, #hsqkrdaqwf tfoot, #hsqkrdaqwf tr, #hsqkrdaqwf td, #hsqkrdaqwf th {
+#cjlrabhivw thead, #cjlrabhivw tbody, #cjlrabhivw tfoot, #cjlrabhivw tr, #cjlrabhivw td, #cjlrabhivw th {
   border-style: none;
 }
 
-#hsqkrdaqwf p {
+#cjlrabhivw p {
   margin: 0;
   padding: 0;
 }
 
-#hsqkrdaqwf .gt_table {
+#cjlrabhivw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1134,12 +1183,12 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-left-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_caption {
+#cjlrabhivw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hsqkrdaqwf .gt_title {
+#cjlrabhivw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1151,7 +1200,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-bottom-width: 0;
 }
 
-#hsqkrdaqwf .gt_subtitle {
+#cjlrabhivw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1163,7 +1212,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-top-width: 0;
 }
 
-#hsqkrdaqwf .gt_heading {
+#cjlrabhivw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1175,13 +1224,13 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-right-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_bottom_border {
+#cjlrabhivw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_col_headings {
+#cjlrabhivw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1196,7 +1245,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-right-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_col_heading {
+#cjlrabhivw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1216,7 +1265,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   overflow-x: hidden;
 }
 
-#hsqkrdaqwf .gt_column_spanner_outer {
+#cjlrabhivw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1228,15 +1277,15 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 4px;
 }
 
-#hsqkrdaqwf .gt_column_spanner_outer:first-child {
+#cjlrabhivw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hsqkrdaqwf .gt_column_spanner_outer:last-child {
+#cjlrabhivw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hsqkrdaqwf .gt_column_spanner {
+#cjlrabhivw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1248,11 +1297,11 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   width: 100%;
 }
 
-#hsqkrdaqwf .gt_spanner_row {
+#cjlrabhivw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hsqkrdaqwf .gt_group_heading {
+#cjlrabhivw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1278,7 +1327,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   text-align: left;
 }
 
-#hsqkrdaqwf .gt_empty_group_heading {
+#cjlrabhivw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1293,15 +1342,15 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   vertical-align: middle;
 }
 
-#hsqkrdaqwf .gt_from_md > :first-child {
+#cjlrabhivw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hsqkrdaqwf .gt_from_md > :last-child {
+#cjlrabhivw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hsqkrdaqwf .gt_row {
+#cjlrabhivw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1320,7 +1369,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   overflow-x: hidden;
 }
 
-#hsqkrdaqwf .gt_stub {
+#cjlrabhivw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1333,7 +1382,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#hsqkrdaqwf .gt_stub_row_group {
+#cjlrabhivw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1347,15 +1396,15 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   vertical-align: top;
 }
 
-#hsqkrdaqwf .gt_row_group_first td {
+#cjlrabhivw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hsqkrdaqwf .gt_row_group_first th {
+#cjlrabhivw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hsqkrdaqwf .gt_summary_row {
+#cjlrabhivw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1365,16 +1414,16 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#hsqkrdaqwf .gt_first_summary_row {
+#cjlrabhivw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_first_summary_row.thick {
+#cjlrabhivw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hsqkrdaqwf .gt_last_summary_row {
+#cjlrabhivw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1384,7 +1433,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-bottom-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_grand_summary_row {
+#cjlrabhivw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1394,7 +1443,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#hsqkrdaqwf .gt_first_grand_summary_row {
+#cjlrabhivw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1404,7 +1453,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-top-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_last_grand_summary_row_top {
+#cjlrabhivw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1414,11 +1463,11 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-bottom-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_striped {
+#cjlrabhivw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hsqkrdaqwf .gt_table_body {
+#cjlrabhivw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1427,7 +1476,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-bottom-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_footnotes {
+#cjlrabhivw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1441,7 +1490,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-right-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_footnote {
+#cjlrabhivw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1450,7 +1499,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#hsqkrdaqwf .gt_sourcenotes {
+#cjlrabhivw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1464,7 +1513,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-right-color: #D3D3D3;
 }
 
-#hsqkrdaqwf .gt_sourcenote {
+#cjlrabhivw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1472,112 +1521,85 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#hsqkrdaqwf .gt_left {
+#cjlrabhivw .gt_left {
   text-align: left;
 }
 
-#hsqkrdaqwf .gt_center {
+#cjlrabhivw .gt_center {
   text-align: center;
 }
 
-#hsqkrdaqwf .gt_right {
+#cjlrabhivw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hsqkrdaqwf .gt_font_normal {
+#cjlrabhivw .gt_font_normal {
   font-weight: normal;
 }
 
-#hsqkrdaqwf .gt_font_bold {
+#cjlrabhivw .gt_font_bold {
   font-weight: bold;
 }
 
-#hsqkrdaqwf .gt_font_italic {
+#cjlrabhivw .gt_font_italic {
   font-style: italic;
 }
 
-#hsqkrdaqwf .gt_super {
+#cjlrabhivw .gt_super {
   font-size: 65%;
 }
 
-#hsqkrdaqwf .gt_footnote_marks {
+#cjlrabhivw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hsqkrdaqwf .gt_asterisk {
+#cjlrabhivw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hsqkrdaqwf .gt_indent_1 {
+#cjlrabhivw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hsqkrdaqwf .gt_indent_2 {
+#cjlrabhivw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hsqkrdaqwf .gt_indent_3 {
+#cjlrabhivw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hsqkrdaqwf .gt_indent_4 {
+#cjlrabhivw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hsqkrdaqwf .gt_indent_5 {
+#cjlrabhivw .gt_indent_5 {
   text-indent: 25px;
-}
-
-#hsqkrdaqwf .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#hsqkrdaqwf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
 }
 </style>
 
-<table class="gt_table do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-</colgroup>
+<table class="gt_table do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings gt_spanner_row header">
+<tr class="header gt_col_headings gt_spanner_row">
 <th rowspan="2" id="Sex" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Sex</th>
-<th colspan="3" id="Wt24" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
-Wt24
-</div></th>
-<th colspan="3" id="Wt1" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
-Wt1
-</div></th>
-<th colspan="3" id="Solids" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
-Solids
-</div></th>
+<th colspan="3" id="Wt24" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Wt24</span></th>
+<th colspan="3" id="Wt1" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Wt1</span></th>
+<th colspan="3" id="Solids" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Solids</span></th>
 </tr>
-<tr class="gt_col_headings even">
-<th id="Wt24.Mean" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean</th>
-<th id="Wt24.Median" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median</th>
-<th id="Wt24.sd" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std.Dev</th>
-<th id="Wt1.Mean" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean</th>
-<th id="Wt1.Median" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median</th>
-<th id="Wt1.sd" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std.Dev</th>
-<th id="Solids.Mean" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean</th>
-<th id="Solids.Median" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median</th>
-<th id="Solids.sd" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std.Dev</th>
+<tr class="odd gt_col_headings">
+<th id="Mean" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean</th>
+<th id="Median" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median</th>
+<th id="Std.Dev" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std.Dev</th>
+<th id="Mean" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean</th>
+<th id="Median" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median</th>
+<th id="Std.Dev" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std.Dev</th>
+<th id="Mean" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean</th>
+<th id="Median" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median</th>
+<th id="Std.Dev" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std.Dev</th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
@@ -1614,52 +1636,20 @@ Solids
 </figure>
 </div>
 </div>
-<p><a href="#tbl-summary" class="quarto-xref">Table&nbsp;2</a> shows the mean, median and standard deviation of Wt24, Wt1 and Solids by Sex. <a href="#tbl-summary" class="quarto-xref">Table&nbsp;2</a> highlights that there appears to be a slight difference between Wt24 by sex. Additionally, There does not appear to be a difference in Wt1 and Solids by sex.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-box-wt1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-box-wt1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="Group-1-Project_files/figure-html/fig-box-wt1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-box-wt1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Distribution of weight at 1 month by sex
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p><a href="#fig-box-wt1" class="quarto-xref">Figure&nbsp;2</a> presents a boxplot illustrating the distribution of weight at 1 month categorized by sex. The plot suggests that male infants tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-box-wt24" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-box-wt24-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="Group-1-Project_files/figure-html/fig-box-wt24-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-box-wt24-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Distribution of weight at 24 months by sex
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p><a href="#fig-box-wt24" class="quarto-xref">Figure&nbsp;3</a> extends this analysis to weight at 24 months, where the observed trend continues. Male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-scat-wt24-solids" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-scat-wt24-solids-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="Group-1-Project_files/figure-html/fig-scat-wt24-solids-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scat-wt24-solids-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Relationship between weight at 24 months and age at introduction to solids, colored by sex
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p><a href="#fig-scat-wt24-solids" class="quarto-xref">Figure&nbsp;4</a> illustrates the relationship between weight at 24 months (Wt24) and the age at which solid foods were introduced (Solids), with separate regression lines for males and females. The plot suggests a slight negative trend for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weaker or negligible relationship between solid food introduction and weight at 24 months for male children.</p>
+<p><a href="#tbl-summary" class="quarto-xref">Table&nbsp;2</a> shows the mean, median and standard deviation of <code>Wt24</code>, <code>Wt1</code> and <code>Solids</code> by <code>Sex</code>. On average, there appears to be a slight difference in <code>Wt24</code> and <code>Wt1</code>by <code>Sex</code>. There does not appear to be a difference in <code>Solids</code> by <code>Sex</code> on average.</p>
+</section>
+<section id="sec-formalanalysis" class="level2">
+<h2 class="anchored" data-anchor-id="sec-formalanalysis">Formal Analysis</h2>
+</section>
+<section id="sec-conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="sec-conclusion">Conclusion</h2>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><p><a href="https://www.nhs.uk/conditions/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/" class="uri">https://www.nhs.uk/conditions/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/</a></p></li>
+<li><p><a href="https://www.babycenter.com/baby/baby-development/average-weight-and-growth-chart-for-babies-toddlers-and-beyo_10357633" class="uri">https://www.babycenter.com/baby/baby-development/average-weight-and-growth-chart-for-babies-toddlers-and-beyo_10357633</a></p></li>
+</ul>
 </section>
 
 </main>
@@ -1699,7 +1689,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1731,45 +1732,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -1804,11 +1767,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
+      return note.innerHTML;
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -1856,6 +1815,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

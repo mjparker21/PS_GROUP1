@@ -5,6 +5,14 @@ format: html
 editor: visual
 ---
 
+## Introduction 
+
+Steadily increasing weight is an indicator that a baby is healthy. Weight change differs between children, so it is of interest to know what factors influence a child's weight gain. A study conducted at the Queen Mothers hospital in Glasgow sampled 127 new born babies and aims to investigate nutritional status at birth and early infancy and collected the following variables:
+
+`Sex`  - The child's sex (categorical variable,
+
+Here we shall assess the performance of weight at 1 month as a predictor of weight at 24 months. Moreover, we shall consider if a child's sex and age at which they where introduced to solid foods are further explanatory variables of weight at 24 months. After which we see if the child's difference in weight from 1 month to 24 months differs by the child's sex.
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -119,3 +127,9 @@ data |>
 ```
 
 @tbl-summary shows the mean, median and standard deviation of Wt24, Wt1 and Solids by Sex. @tbl-summary highlights that there appears to be a slight difference between Wt24 by sex. Additionally, There does not appear to be a difference in Wt1 and Solids by sex.
+
+## References 
+
+<https://www.nhs.uk/conditions/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/>
+
+<https://www.babycenter.com/baby/baby-development/average-weight-and-growth-chart-for-babies-toddlers-and-beyo_10357633>

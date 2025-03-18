@@ -1,0 +1,62 @@
+---
+title: "simple linear regression"
+output: 
+  html_document: default
+  pdf_document: default
+format: html
+---
+```{r}
+# Load required libraries
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+
+# Data import
+setwd("C:/Users/Lenovo/Documents/r document")
+data <- read.csv("project1-growth-wt.csv")
+
+
+# Display the first 6 rows of the dataset
+head(data)
+
+# Fit a simple linear regression model: Wt24 ~ Wt1
+model <- lm(Wt24 ~ Wt1, data = data)
+
+# Fit a simple linear regression model: Wt24 ~ Wt1
+summary(model)
+
+# Extract fitted values and residuals
+fitted_values <- fitted(model)
+residuals <- resid(model)
+
+# Plot residuals vs. fitted values
+ggplot(data, aes(x = fitted_values, y = residuals)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(title = "Residuals vs Fitted Values", x = "Fitted Values", y = "Residuals")
+
+# Generate a Normal Q-Q plot using ggplot2
+ggplot(data.frame(residuals = residuals), aes(sample = residuals)) +
+  stat_qq() +
+  stat_qq_line() +
+  labs(title = "Normal Q-Q Plot of Residuals", x = "Theoretical Quantiles", y = "Sample Quantiles")
+
+# Create a histogram of residuals
+ggplot(data.frame(residuals), aes(x = residuals)) +
+  geom_histogram(binwidth = 0.5, fill = "blue", color = "black", alpha = 0.7) +
+  labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency")
+
+
+# Calculate R-squared value
+r_squared <- summary(model)$r.squared
+cat("R-squared:", r_squared, "\n")
+
+
+# Calculate the p-value for the β coefficient (Wt1) and test for significance
+p_value <- summary(model)$coefficients[2, 4]
+if (p_value < 0.05) {
+  cat("The β coefficient is statistically significant at the 5% level (p-value:", p_value, ")\n")
+} else {
+  cat("The β coefficient is NOT statistically significant at the 5% level (p-value:", p_value, ")\n")
+}
+```

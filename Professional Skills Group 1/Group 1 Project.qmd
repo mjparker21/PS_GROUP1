@@ -27,8 +27,8 @@ library(patchwork)
 library(moderndive)
 library(knitr)
 library(kableExtra)
-setwd("/Users/mattparker/Downloads")
-data <- read.csv("project1-growth-wt.csv")
+data <- read.csv("~/Downloads/project1-growth-wt.csv")
+
 ```
 
 ## Exploratory Analysis
@@ -128,8 +128,68 @@ data |>
 
 @tbl-summary shows the mean, median and standard deviation of Wt24, Wt1 and Solids by Sex. @tbl-summary highlights that there appears to be a slight difference between Wt24 by sex. Additionally, There does not appear to be a difference in Wt1 and Solids by sex.
 
+
+
+```{r}
+#| echo: false
+#| fig-cap: Distribution of weight at 1 month by sex
+#| label: fig-box-wt1
+#| fig-align: center
+#| fig-width: 5
+#| fig-height: 4
+
+ggplot(data, aes(x = Sex, y = Wt1, fill = Sex)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(title = "Weight at 1 Month by Sex", x = "Sex", y = "Weight (kg)") +
+  theme_minimal()
+```
+
+@fig-box-wt1 presents a boxplot illustrating the distribution of weight at 1 month categorized by sex. The plot suggests that male infants tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution.
+
+```{r}
+#| echo: false
+#| fig-cap: Distribution of weight at 24 months by sex
+#| label: fig-box-wt24
+#| fig-align: center
+#| fig-width: 5
+#| fig-height: 4
+
+ggplot(data, aes(x = Sex, y = Wt24, fill = Sex)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(title = "Weight at 24 Months by Sex", x = "Sex", y = "Weight (kg)") +
+  theme_minimal()
+
+```
+
+@fig-box-wt24 extends this analysis to weight at 24 months, where the observed trend continues. Male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.
+
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-cap: Relationship between weight at 24 months and age at introduction to solids, colored by sex
+#| label: fig-scat-wt24-solids
+#| fig-align: center
+#| fig-width: 5
+#| fig-height: 4
+
+ggplot(data, aes(x = Solids, y = Wt24, color = Sex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) + 
+  labs(title = "Weight at 24 Months vs. Age at Introduction to Solids",
+    x = "Age (Months) at Introduction to Solids",
+    y = "Weight at 24 Months (kg)",
+    color = "Sex") +
+  theme_minimal()
+
+```
+
+@fig-scat-wt24-solids illustrates the relationship between weight at 24 months (Wt24) and the age at which solid foods were introduced (Solids), with separate regression lines for males and females. The plot suggests a slight negative trend for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weaker or negligible relationship between solid food introduction and weight at 24 months for male children. 
+
 ## References 
 
 <https://www.nhs.uk/conditions/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/>
 
 <https://www.babycenter.com/baby/baby-development/average-weight-and-growth-chart-for-babies-toddlers-and-beyo_10357633>
+

@@ -56,7 +56,7 @@ library(patchwork)
 library(moderndive)
 library(knitr)
 library(kableExtra)
-data <- read.csv("~/Downloads/project1-growth-wt.csv")
+data <- read.csv("project1-growth-wt.csv")
 
 ```
 
@@ -285,6 +285,29 @@ Where, $\alpha$ is the intercept, $Wt24_i$, $Wt1_i$ and $Solids_i$, is `Wt24`, `
 #| message: false
 #| warning: false
 
+int.model22 <- lm(Wt24 ~ Wt1 + Solids + Sex, data)
+Coefs22 <- round(coef(int.model22), 3)
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-regtable22
+#| tbl-cap: Estimates of the regression model coefficients.
+get_regression_table(int.model22)[, c(1, 2, 5)] |>
+  gt() |> 
+  fmt_number(decimals=2) |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+
+```
+From @tbl-regtable22 we see that the p-value for Solids is 0.17 not statistically significant at a significance level of $\alpha=0.05$. Therefore, we drop Solids from the model and refit with only Wt1 and Sex as predictors.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
 int.model2 <- lm(Wt24 ~ Wt1 + Solids + Sex, data)
 step.model2 <- stepAIC(int.model2, direction = "backward", trace = FALSE)
 Coefs2 <- round(coef(step.model2), 3)
@@ -303,9 +326,7 @@ get_regression_table(step.model2)[, c(1, 2, 5)] |>
   tab_style(style = cell_text(weight = "bold"),
             locations = cells_column_labels())
 ```
-
-@tbl-regtable2 shows the estimates for the fitted regression model. We do not receive a coefficient for $\beta_2$ due to the fact that when we fit the model we used Akaike Information Criterion (AIC) to carry out model comparisons. Through this model comparison method, we dropped $Solids_i$ from the model. Additionally, from @tbl-regtable2 we see that all p-values are close to zero so we conclude the three variables above are statistically significant. Given this information, we conclude the best model is as follows:
-
+All coefficients in @tbl-regtable2 appear to be statistically significant due to the low p-values. Therefore, we get the following regression equation:
 $$
 \widehat{Wt24_i} = 5.23+1.63Wt1_i+0.53\mathbb{I}_{male}
 $$ {#eq-final}

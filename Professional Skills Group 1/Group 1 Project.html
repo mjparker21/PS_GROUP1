@@ -35,6 +35,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="Group 1 Project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Group 1 Project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -76,8 +105,8 @@ ul.task-list li input[type="checkbox"] {
 <p><code>Wt1</code> - The child’s weight at 1 month (numerical variable, continuous).</p>
 <p><code>Solids</code> - The age at which the child was first introduced to solid food (numerical variable, discrete).</p>
 <p><code>Sex</code> - The child’s sex (categorical variable, with categories Male or Female).</p>
-<p>The goal of this report is to examine which variables influence <code>Wt24</code> first by assessing how well <code>Wt24</code> can be predicted using a linear model with <code>Wt1</code> as an explanatory variable. We then see if the model if improved by adding <code>Sex</code> or <code>Solids</code> to the model. Finally, we see if there is any evidence that the difference in weight (<code>Wt24</code> - <code>Wt1</code>) is different for male and female children.</p>
-<p><a href="#sec-exploratory" class="quarto-xref">Section&nbsp;2</a> consists of exploratory analysis explores the potential relationships between variables by use of data visualisation and numerical summaries. <a href="#sec-formalanalysis" class="quarto-xref">Section&nbsp;3</a> uses linear regression modelling to answer the questions of interest. <a href="#sec-conclusion" class="quarto-xref">Section&nbsp;4</a> summarisises the findings of the report as well as discuss some limitations of the study.</p>
+<p>The goal of this report is to examine which variables influence A child’s weight at 24 months first by assessing how well <code>Wt24</code> can be predicted using a linear model with <code>Wt1</code> as an explanatory variable. We then see if the model if improved by adding <code>Sex</code> or <code>Solids</code> to the model. Finally, we see if there is any evidence that the difference in weight (<code>Wt24</code> - <code>Wt1</code>) is different for male and female children.</p>
+<p><a href="#sec-exploratory" class="quarto-xref">Section&nbsp;2</a> consists of exploratory analysis explores the potential relationships between variables by use of data visualisation and numerical summaries. <a href="#sec-formalanalysis" class="quarto-xref">Section&nbsp;3</a> uses linear regression modelling to answer the questions of interest. <a href="#sec-conclusion" class="quarto-xref">Section&nbsp;6</a> summarisises the findings of the report as well as discuss some limitations of the study.</p>
 </section>
 <section id="sec-exploratory" class="level2">
 <h2 class="anchored" data-anchor-id="sec-exploratory">Exploratory Analysis</h2>
@@ -161,23 +190,23 @@ Table&nbsp;1: Correlations between numerical variables by sex
 <div aria-describedby="tbl-corrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-corrs" style="flex-basis: 50.0%;justify-content: center;">
-<div id="weldqepelm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#weldqepelm table {
+<div id="tpcokstwlh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tpcokstwlh table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#weldqepelm thead, #weldqepelm tbody, #weldqepelm tfoot, #weldqepelm tr, #weldqepelm td, #weldqepelm th {
+#tpcokstwlh thead, #tpcokstwlh tbody, #tpcokstwlh tfoot, #tpcokstwlh tr, #tpcokstwlh td, #tpcokstwlh th {
   border-style: none;
 }
 
-#weldqepelm p {
+#tpcokstwlh p {
   margin: 0;
   padding: 0;
 }
 
-#weldqepelm .gt_table {
+#tpcokstwlh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -203,12 +232,12 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-left-color: #D3D3D3;
 }
 
-#weldqepelm .gt_caption {
+#tpcokstwlh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#weldqepelm .gt_title {
+#tpcokstwlh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -220,7 +249,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-bottom-width: 0;
 }
 
-#weldqepelm .gt_subtitle {
+#tpcokstwlh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -232,7 +261,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-top-width: 0;
 }
 
-#weldqepelm .gt_heading {
+#tpcokstwlh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -244,13 +273,13 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-right-color: #D3D3D3;
 }
 
-#weldqepelm .gt_bottom_border {
+#tpcokstwlh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#weldqepelm .gt_col_headings {
+#tpcokstwlh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -265,7 +294,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-right-color: #D3D3D3;
 }
 
-#weldqepelm .gt_col_heading {
+#tpcokstwlh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -285,7 +314,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   overflow-x: hidden;
 }
 
-#weldqepelm .gt_column_spanner_outer {
+#tpcokstwlh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -297,15 +326,15 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 4px;
 }
 
-#weldqepelm .gt_column_spanner_outer:first-child {
+#tpcokstwlh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#weldqepelm .gt_column_spanner_outer:last-child {
+#tpcokstwlh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#weldqepelm .gt_column_spanner {
+#tpcokstwlh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -317,11 +346,11 @@ Table&nbsp;1: Correlations between numerical variables by sex
   width: 100%;
 }
 
-#weldqepelm .gt_spanner_row {
+#tpcokstwlh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#weldqepelm .gt_group_heading {
+#tpcokstwlh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -347,7 +376,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   text-align: left;
 }
 
-#weldqepelm .gt_empty_group_heading {
+#tpcokstwlh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -362,15 +391,15 @@ Table&nbsp;1: Correlations between numerical variables by sex
   vertical-align: middle;
 }
 
-#weldqepelm .gt_from_md > :first-child {
+#tpcokstwlh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#weldqepelm .gt_from_md > :last-child {
+#tpcokstwlh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#weldqepelm .gt_row {
+#tpcokstwlh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -389,7 +418,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   overflow-x: hidden;
 }
 
-#weldqepelm .gt_stub {
+#tpcokstwlh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -402,7 +431,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#weldqepelm .gt_stub_row_group {
+#tpcokstwlh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -416,15 +445,15 @@ Table&nbsp;1: Correlations between numerical variables by sex
   vertical-align: top;
 }
 
-#weldqepelm .gt_row_group_first td {
+#tpcokstwlh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#weldqepelm .gt_row_group_first th {
+#tpcokstwlh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#weldqepelm .gt_summary_row {
+#tpcokstwlh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -434,16 +463,16 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#weldqepelm .gt_first_summary_row {
+#tpcokstwlh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#weldqepelm .gt_first_summary_row.thick {
+#tpcokstwlh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#weldqepelm .gt_last_summary_row {
+#tpcokstwlh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -453,7 +482,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-bottom-color: #D3D3D3;
 }
 
-#weldqepelm .gt_grand_summary_row {
+#tpcokstwlh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -463,7 +492,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#weldqepelm .gt_first_grand_summary_row {
+#tpcokstwlh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -473,7 +502,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-top-color: #D3D3D3;
 }
 
-#weldqepelm .gt_last_grand_summary_row_top {
+#tpcokstwlh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -483,11 +512,11 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-bottom-color: #D3D3D3;
 }
 
-#weldqepelm .gt_striped {
+#tpcokstwlh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#weldqepelm .gt_table_body {
+#tpcokstwlh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -496,7 +525,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-bottom-color: #D3D3D3;
 }
 
-#weldqepelm .gt_footnotes {
+#tpcokstwlh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -510,7 +539,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-right-color: #D3D3D3;
 }
 
-#weldqepelm .gt_footnote {
+#tpcokstwlh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -519,7 +548,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#weldqepelm .gt_sourcenotes {
+#tpcokstwlh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -533,7 +562,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-right-color: #D3D3D3;
 }
 
-#weldqepelm .gt_sourcenote {
+#tpcokstwlh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -541,68 +570,68 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#weldqepelm .gt_left {
+#tpcokstwlh .gt_left {
   text-align: left;
 }
 
-#weldqepelm .gt_center {
+#tpcokstwlh .gt_center {
   text-align: center;
 }
 
-#weldqepelm .gt_right {
+#tpcokstwlh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#weldqepelm .gt_font_normal {
+#tpcokstwlh .gt_font_normal {
   font-weight: normal;
 }
 
-#weldqepelm .gt_font_bold {
+#tpcokstwlh .gt_font_bold {
   font-weight: bold;
 }
 
-#weldqepelm .gt_font_italic {
+#tpcokstwlh .gt_font_italic {
   font-style: italic;
 }
 
-#weldqepelm .gt_super {
+#tpcokstwlh .gt_super {
   font-size: 65%;
 }
 
-#weldqepelm .gt_footnote_marks {
+#tpcokstwlh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#weldqepelm .gt_asterisk {
+#tpcokstwlh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#weldqepelm .gt_indent_1 {
+#tpcokstwlh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#weldqepelm .gt_indent_2 {
+#tpcokstwlh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#weldqepelm .gt_indent_3 {
+#tpcokstwlh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#weldqepelm .gt_indent_4 {
+#tpcokstwlh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#weldqepelm .gt_indent_5 {
+#tpcokstwlh .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
 
-<div id="tbl-corrs-1" class="gt_table do-not-create-environment quarto-float anchored" data-quarto-bootstrap="false" data-quarto-disable-processing="false" data-quarto-postprocess="true">
+<div id="tbl-corrs-1" class="gt_table do-not-create-environment quarto-float anchored" data-quarto-postprocess="true" data-quarto-bootstrap="false" data-quarto-disable-processing="false">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-corrs-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Correlations for numerical variables for male children
@@ -645,23 +674,23 @@ Table&nbsp;1: Correlations between numerical variables by sex
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-corrs" style="flex-basis: 50.0%;justify-content: center;">
-<div id="kfhtdilcfo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kfhtdilcfo table {
+<div id="gucwjqudqw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gucwjqudqw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kfhtdilcfo thead, #kfhtdilcfo tbody, #kfhtdilcfo tfoot, #kfhtdilcfo tr, #kfhtdilcfo td, #kfhtdilcfo th {
+#gucwjqudqw thead, #gucwjqudqw tbody, #gucwjqudqw tfoot, #gucwjqudqw tr, #gucwjqudqw td, #gucwjqudqw th {
   border-style: none;
 }
 
-#kfhtdilcfo p {
+#gucwjqudqw p {
   margin: 0;
   padding: 0;
 }
 
-#kfhtdilcfo .gt_table {
+#gucwjqudqw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -687,12 +716,12 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-left-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_caption {
+#gucwjqudqw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kfhtdilcfo .gt_title {
+#gucwjqudqw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -704,7 +733,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-bottom-width: 0;
 }
 
-#kfhtdilcfo .gt_subtitle {
+#gucwjqudqw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -716,7 +745,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-top-width: 0;
 }
 
-#kfhtdilcfo .gt_heading {
+#gucwjqudqw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -728,13 +757,13 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-right-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_bottom_border {
+#gucwjqudqw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_col_headings {
+#gucwjqudqw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -749,7 +778,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-right-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_col_heading {
+#gucwjqudqw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -769,7 +798,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   overflow-x: hidden;
 }
 
-#kfhtdilcfo .gt_column_spanner_outer {
+#gucwjqudqw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -781,15 +810,15 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 4px;
 }
 
-#kfhtdilcfo .gt_column_spanner_outer:first-child {
+#gucwjqudqw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kfhtdilcfo .gt_column_spanner_outer:last-child {
+#gucwjqudqw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kfhtdilcfo .gt_column_spanner {
+#gucwjqudqw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -801,11 +830,11 @@ Table&nbsp;1: Correlations between numerical variables by sex
   width: 100%;
 }
 
-#kfhtdilcfo .gt_spanner_row {
+#gucwjqudqw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kfhtdilcfo .gt_group_heading {
+#gucwjqudqw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -831,7 +860,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   text-align: left;
 }
 
-#kfhtdilcfo .gt_empty_group_heading {
+#gucwjqudqw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -846,15 +875,15 @@ Table&nbsp;1: Correlations between numerical variables by sex
   vertical-align: middle;
 }
 
-#kfhtdilcfo .gt_from_md > :first-child {
+#gucwjqudqw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kfhtdilcfo .gt_from_md > :last-child {
+#gucwjqudqw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kfhtdilcfo .gt_row {
+#gucwjqudqw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -873,7 +902,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   overflow-x: hidden;
 }
 
-#kfhtdilcfo .gt_stub {
+#gucwjqudqw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -886,7 +915,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#kfhtdilcfo .gt_stub_row_group {
+#gucwjqudqw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -900,15 +929,15 @@ Table&nbsp;1: Correlations between numerical variables by sex
   vertical-align: top;
 }
 
-#kfhtdilcfo .gt_row_group_first td {
+#gucwjqudqw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kfhtdilcfo .gt_row_group_first th {
+#gucwjqudqw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kfhtdilcfo .gt_summary_row {
+#gucwjqudqw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -918,16 +947,16 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#kfhtdilcfo .gt_first_summary_row {
+#gucwjqudqw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_first_summary_row.thick {
+#gucwjqudqw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kfhtdilcfo .gt_last_summary_row {
+#gucwjqudqw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -937,7 +966,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-bottom-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_grand_summary_row {
+#gucwjqudqw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -947,7 +976,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#kfhtdilcfo .gt_first_grand_summary_row {
+#gucwjqudqw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -957,7 +986,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-top-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_last_grand_summary_row_top {
+#gucwjqudqw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -967,11 +996,11 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-bottom-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_striped {
+#gucwjqudqw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kfhtdilcfo .gt_table_body {
+#gucwjqudqw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -980,7 +1009,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-bottom-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_footnotes {
+#gucwjqudqw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -994,7 +1023,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-right-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_footnote {
+#gucwjqudqw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1003,7 +1032,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#kfhtdilcfo .gt_sourcenotes {
+#gucwjqudqw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1017,7 +1046,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
   border-right-color: #D3D3D3;
 }
 
-#kfhtdilcfo .gt_sourcenote {
+#gucwjqudqw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1025,68 +1054,68 @@ Table&nbsp;1: Correlations between numerical variables by sex
   padding-right: 5px;
 }
 
-#kfhtdilcfo .gt_left {
+#gucwjqudqw .gt_left {
   text-align: left;
 }
 
-#kfhtdilcfo .gt_center {
+#gucwjqudqw .gt_center {
   text-align: center;
 }
 
-#kfhtdilcfo .gt_right {
+#gucwjqudqw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kfhtdilcfo .gt_font_normal {
+#gucwjqudqw .gt_font_normal {
   font-weight: normal;
 }
 
-#kfhtdilcfo .gt_font_bold {
+#gucwjqudqw .gt_font_bold {
   font-weight: bold;
 }
 
-#kfhtdilcfo .gt_font_italic {
+#gucwjqudqw .gt_font_italic {
   font-style: italic;
 }
 
-#kfhtdilcfo .gt_super {
+#gucwjqudqw .gt_super {
   font-size: 65%;
 }
 
-#kfhtdilcfo .gt_footnote_marks {
+#gucwjqudqw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kfhtdilcfo .gt_asterisk {
+#gucwjqudqw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kfhtdilcfo .gt_indent_1 {
+#gucwjqudqw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kfhtdilcfo .gt_indent_2 {
+#gucwjqudqw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kfhtdilcfo .gt_indent_3 {
+#gucwjqudqw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kfhtdilcfo .gt_indent_4 {
+#gucwjqudqw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kfhtdilcfo .gt_indent_5 {
+#gucwjqudqw .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
 
-<div id="tbl-corrs-2" class="gt_table do-not-create-environment quarto-float anchored" data-quarto-bootstrap="false" data-quarto-disable-processing="false" data-quarto-postprocess="true">
+<div id="tbl-corrs-2" class="gt_table do-not-create-environment quarto-float anchored" data-quarto-postprocess="true" data-quarto-bootstrap="false" data-quarto-disable-processing="false">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-corrs-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Correlations for numerical variables for female children
@@ -1132,7 +1161,7 @@ Table&nbsp;1: Correlations between numerical variables by sex
 </div>
 </figure>
 </div>
-<p><a href="#tbl-corrs" class="quarto-xref">Table&nbsp;1</a> shows the correlation between numerical variables for male and female children. For male children <a href="#tbl-corrs-1" class="quarto-xref">Table&nbsp;1 (a)</a> highlights that for male children <code>Wt1</code> and <code>Wt24</code> are moderately, positivley correlated, whereas <code>Solids</code> against <code>Wt24</code> and <code>Wt1</code> are weakly negatively correlated. This is slightly different for female children as from <a href="#tbl-corrs-2" class="quarto-xref">Table&nbsp;1 (b)</a> there appears to be a higher positive correlation between <code>Wt24</code> and <code>Wt1</code>. Additionally, there appears to be a moderate negative correlation between <code>Solids</code> and <code>Wt24</code> for female children and a weak-moderate correlation between <code>Solids</code> and <code>Wt1</code>.</p>
+<p><a href="#tbl-corrs" class="quarto-xref">Table&nbsp;1</a> shows the correlation between numerical variables for male and female children. For male children <a href="#tbl-corrs-1" class="quarto-xref">Table&nbsp;1 (a)</a> highlights that for male children <code>Wt1</code> and <code>Wt24</code> are moderately, positively correlated, whereas <code>Solids</code> against <code>Wt24</code> and <code>Wt1</code> are weakly negatively correlated. This is slightly different for female children as from <a href="#tbl-corrs-2" class="quarto-xref">Table&nbsp;1 (b)</a> there appears to be a higher positive correlation between <code>Wt24</code> and <code>Wt1</code>. Additionally, there appears to be a moderate negative correlation between <code>Solids</code> and <code>Wt24</code> for female children and a weak-moderate correlation between <code>Solids</code> and <code>Wt1</code>.</p>
 <div class="cell">
 <div id="tbl-summary" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1141,23 +1170,23 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
 </figcaption>
 <div aria-describedby="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="cjlrabhivw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cjlrabhivw table {
+<div id="ctnanudyfz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ctnanudyfz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cjlrabhivw thead, #cjlrabhivw tbody, #cjlrabhivw tfoot, #cjlrabhivw tr, #cjlrabhivw td, #cjlrabhivw th {
+#ctnanudyfz thead, #ctnanudyfz tbody, #ctnanudyfz tfoot, #ctnanudyfz tr, #ctnanudyfz td, #ctnanudyfz th {
   border-style: none;
 }
 
-#cjlrabhivw p {
+#ctnanudyfz p {
   margin: 0;
   padding: 0;
 }
 
-#cjlrabhivw .gt_table {
+#ctnanudyfz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1183,12 +1212,12 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-left-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_caption {
+#ctnanudyfz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cjlrabhivw .gt_title {
+#ctnanudyfz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1200,7 +1229,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-bottom-width: 0;
 }
 
-#cjlrabhivw .gt_subtitle {
+#ctnanudyfz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1212,7 +1241,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-top-width: 0;
 }
 
-#cjlrabhivw .gt_heading {
+#ctnanudyfz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1224,13 +1253,13 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-right-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_bottom_border {
+#ctnanudyfz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_col_headings {
+#ctnanudyfz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1245,7 +1274,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-right-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_col_heading {
+#ctnanudyfz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1265,7 +1294,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   overflow-x: hidden;
 }
 
-#cjlrabhivw .gt_column_spanner_outer {
+#ctnanudyfz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1277,15 +1306,15 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 4px;
 }
 
-#cjlrabhivw .gt_column_spanner_outer:first-child {
+#ctnanudyfz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cjlrabhivw .gt_column_spanner_outer:last-child {
+#ctnanudyfz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cjlrabhivw .gt_column_spanner {
+#ctnanudyfz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1297,11 +1326,11 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   width: 100%;
 }
 
-#cjlrabhivw .gt_spanner_row {
+#ctnanudyfz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cjlrabhivw .gt_group_heading {
+#ctnanudyfz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1327,7 +1356,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   text-align: left;
 }
 
-#cjlrabhivw .gt_empty_group_heading {
+#ctnanudyfz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1342,15 +1371,15 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   vertical-align: middle;
 }
 
-#cjlrabhivw .gt_from_md > :first-child {
+#ctnanudyfz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cjlrabhivw .gt_from_md > :last-child {
+#ctnanudyfz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cjlrabhivw .gt_row {
+#ctnanudyfz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1369,7 +1398,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   overflow-x: hidden;
 }
 
-#cjlrabhivw .gt_stub {
+#ctnanudyfz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1382,7 +1411,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#cjlrabhivw .gt_stub_row_group {
+#ctnanudyfz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1396,15 +1425,15 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   vertical-align: top;
 }
 
-#cjlrabhivw .gt_row_group_first td {
+#ctnanudyfz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cjlrabhivw .gt_row_group_first th {
+#ctnanudyfz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cjlrabhivw .gt_summary_row {
+#ctnanudyfz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1414,16 +1443,16 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#cjlrabhivw .gt_first_summary_row {
+#ctnanudyfz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_first_summary_row.thick {
+#ctnanudyfz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cjlrabhivw .gt_last_summary_row {
+#ctnanudyfz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1433,7 +1462,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-bottom-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_grand_summary_row {
+#ctnanudyfz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1443,7 +1472,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#cjlrabhivw .gt_first_grand_summary_row {
+#ctnanudyfz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1453,7 +1482,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-top-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_last_grand_summary_row_top {
+#ctnanudyfz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1463,11 +1492,11 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-bottom-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_striped {
+#ctnanudyfz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cjlrabhivw .gt_table_body {
+#ctnanudyfz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1476,7 +1505,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-bottom-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_footnotes {
+#ctnanudyfz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1490,7 +1519,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-right-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_footnote {
+#ctnanudyfz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1499,7 +1528,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#cjlrabhivw .gt_sourcenotes {
+#ctnanudyfz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1513,7 +1542,7 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   border-right-color: #D3D3D3;
 }
 
-#cjlrabhivw .gt_sourcenote {
+#ctnanudyfz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1521,63 +1550,63 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
   padding-right: 5px;
 }
 
-#cjlrabhivw .gt_left {
+#ctnanudyfz .gt_left {
   text-align: left;
 }
 
-#cjlrabhivw .gt_center {
+#ctnanudyfz .gt_center {
   text-align: center;
 }
 
-#cjlrabhivw .gt_right {
+#ctnanudyfz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cjlrabhivw .gt_font_normal {
+#ctnanudyfz .gt_font_normal {
   font-weight: normal;
 }
 
-#cjlrabhivw .gt_font_bold {
+#ctnanudyfz .gt_font_bold {
   font-weight: bold;
 }
 
-#cjlrabhivw .gt_font_italic {
+#ctnanudyfz .gt_font_italic {
   font-style: italic;
 }
 
-#cjlrabhivw .gt_super {
+#ctnanudyfz .gt_super {
   font-size: 65%;
 }
 
-#cjlrabhivw .gt_footnote_marks {
+#ctnanudyfz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cjlrabhivw .gt_asterisk {
+#ctnanudyfz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cjlrabhivw .gt_indent_1 {
+#ctnanudyfz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cjlrabhivw .gt_indent_2 {
+#ctnanudyfz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cjlrabhivw .gt_indent_3 {
+#ctnanudyfz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cjlrabhivw .gt_indent_4 {
+#ctnanudyfz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cjlrabhivw .gt_indent_5 {
+#ctnanudyfz .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1641,8 +1670,2082 @@ Table&nbsp;2: Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by s
 <section id="sec-formalanalysis" class="level2">
 <h2 class="anchored" data-anchor-id="sec-formalanalysis">Formal Analysis</h2>
 </section>
+<section id="sec-PM" class="level2">
+<h2 class="anchored" data-anchor-id="sec-PM">Primary Model</h2>
+<p>To investigate how well weight at 24 months can be predicted using a linear model with weight at 1 month as the explantory variable, we begin by fitting the following regression model. This model can be written as:</p>
+<p><span class="math display">\[\widehat{Wt24_i} = \hat{\alpha}+\hat{\beta}\ Wt1_i + \epsilon_i ~~~~~  \epsilon_i\sim N(0, \sigma^2)\]</span></p>
+<p>Where <span class="math inline">\(Wt24_i\)</span> is the weight of the <span class="math inline">\(i\)</span>th baby at 24 months. <span class="math inline">\(Wt1_i\)</span> is the weight of the <span class="math inline">\(i\)</span>th baby at 1 month. <span class="math inline">\(\alpha\)</span> is the intercept. That is, it is the predicted weight at 24 months when <span class="math inline">\(Wt1=0\)</span>, whilst biologically meaningless this parameter is necessary. <span class="math inline">\(\beta\)</span> is the slope. That is, it is the average change in weight at 24 months for each additional kilogram increase in weight at 1 months. <span class="math inline">\(\epsilon_i\)</span> is the error term for the <span class="math inline">\(i\)</span>th baby and it is assumed to be normally distributed with mean 0 and variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<div class="cell">
+<div id="tbl-regtable" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-regtable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Estimates of the regression model coefficients.
+</figcaption>
+<div aria-describedby="tbl-regtable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="ckbtxjmklw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ckbtxjmklw table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ckbtxjmklw thead, #ckbtxjmklw tbody, #ckbtxjmklw tfoot, #ckbtxjmklw tr, #ckbtxjmklw td, #ckbtxjmklw th {
+  border-style: none;
+}
+
+#ckbtxjmklw p {
+  margin: 0;
+  padding: 0;
+}
+
+#ckbtxjmklw .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ckbtxjmklw .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ckbtxjmklw .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ckbtxjmklw .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ckbtxjmklw .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ckbtxjmklw .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ckbtxjmklw .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ckbtxjmklw .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ckbtxjmklw .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ckbtxjmklw .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ckbtxjmklw .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ckbtxjmklw .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ckbtxjmklw .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ckbtxjmklw .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ckbtxjmklw .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ckbtxjmklw .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ckbtxjmklw .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ckbtxjmklw .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ckbtxjmklw .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ckbtxjmklw .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ckbtxjmklw .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ckbtxjmklw .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ckbtxjmklw .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ckbtxjmklw .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ckbtxjmklw .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ckbtxjmklw .gt_left {
+  text-align: left;
+}
+
+#ckbtxjmklw .gt_center {
+  text-align: center;
+}
+
+#ckbtxjmklw .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ckbtxjmklw .gt_font_normal {
+  font-weight: normal;
+}
+
+#ckbtxjmklw .gt_font_bold {
+  font-weight: bold;
+}
+
+#ckbtxjmklw .gt_font_italic {
+  font-style: italic;
+}
+
+#ckbtxjmklw .gt_super {
+  font-size: 65%;
+}
+
+#ckbtxjmklw .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ckbtxjmklw .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ckbtxjmklw .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ckbtxjmklw .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ckbtxjmklw .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ckbtxjmklw .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ckbtxjmklw .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">term</th>
+<th id="estimate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">estimate</th>
+<th id="p_value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">p_value</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">intercept</td>
+<td class="gt_row gt_right" headers="estimate">4.82</td>
+<td class="gt_row gt_right" headers="p_value">0.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">Wt1</td>
+<td class="gt_row gt_right" headers="estimate">1.80</td>
+<td class="gt_row gt_right" headers="p_value">0.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>From <a href="#tbl-regtable" class="quarto-xref">Table&nbsp;3</a> we see the coefficients for the model. We sub these values into our mathematical equation above to obtain the regression line below. All p-values appear to be close to zero, that is both coefficents are appear to be statistically significant.</p>
+<p><span class="math display">\[\widehat{Wt24_i}=4.82+1.80Wt1_i+\epsilon_i\]</span> That is, for every <span class="math inline">\(1\)</span>kg increase in weight at 1 month, we would expect weight at 24 months would increase by 1.80kg. And, for a baby whose weight a 1 month is 0kg we would expect their weight at 24 months to be 4.82kg.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-scat2" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scat2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-scat2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scat2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Relationship between Weight at 1 Month and Weight at 24 months with regression line superimposed.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-resids" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resids-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-resids-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resids-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Residuals versus Weight at 1 Month (left) and the fitted values (right)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-resids" class="quarto-xref">Figure&nbsp;4</a> displays the residuals verses weight at 1 month (left) and the residuals versus fitted values (right). From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers, these do not appear to be influential.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-residhist" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residhist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-residhist-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residhist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Histograms of the residuals
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-residhist" class="quarto-xref">Figure&nbsp;5</a> allows us to check that the residuals are normally distributed. Although it is not a perfect bell curve, the residuals appear to follow a normal distribution centered at mean 0.</p>
+</section>
+<section id="secondary-models" class="level2">
+<h2 class="anchored" data-anchor-id="secondary-models">Secondary Models</h2>
+<p>To determine if the above model can be improved by adding the child’s sex and/or age at introduction to solids as further explanatory variables we begin by fitting the following model:</p>
+<p><span class="math display">\[\widehat{Wt24_i} = \hat{\alpha} +\hat{\beta_1} Wt_i + \hat{\beta_2} Solids_i + \hat{\beta_3}\mathbb{I}_{male}+\epsilon_i  ~~~~~  \epsilon_i\sim N(0, \sigma^2)\]</span></p>
+<p>Where <span class="math inline">\(Wt24_i\)</span> is the weight of the <span class="math inline">\(i\)</span>th baby at 24 months. <span class="math inline">\(Wt1_i\)</span> is the weight of the <span class="math inline">\(i\)</span>th baby at 1 month. <span class="math inline">\(\alpha\)</span> is the intercept. That is, it is the predicted weight at 24 months when <span class="math inline">\(Wt1=0\)</span>, whilst biologically meaningless this parameter is necessary. <span class="math inline">\(\beta_1\)</span> is the slope of Wt1. <span class="math inline">\(\beta_2\)</span> is the slope of <span class="math inline">\(Solids_i\)</span> which is the age of weight the <span class="math inline">\(i\)</span>th baby was introduced to solids and <span class="math inline">\(\mathbb{I}_{male}\)</span> is an indicator variable that takes on the following values;</p>
+<p><span class="math display">\[
+I_{\text{male}} =
+\begin{cases}
+1, &amp; \text{if Sex = male} \\
+0, &amp; \text{if Sex = female}
+\end{cases}
+\]</span></p>
+<p>And <span class="math inline">\(\epsilon_i\)</span> is the error term for the <span class="math inline">\(i\)</span>th baby and it is assumed to be normally distributed with mean 0 and variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<div class="cell">
+<div id="tbl-regtable2" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-regtable2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: Estimates of the regression model coefficients.
+</figcaption>
+<div aria-describedby="tbl-regtable2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="vlmtmylydt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vlmtmylydt table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vlmtmylydt thead, #vlmtmylydt tbody, #vlmtmylydt tfoot, #vlmtmylydt tr, #vlmtmylydt td, #vlmtmylydt th {
+  border-style: none;
+}
+
+#vlmtmylydt p {
+  margin: 0;
+  padding: 0;
+}
+
+#vlmtmylydt .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vlmtmylydt .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vlmtmylydt .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vlmtmylydt .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vlmtmylydt .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vlmtmylydt .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vlmtmylydt .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vlmtmylydt .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vlmtmylydt .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vlmtmylydt .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vlmtmylydt .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vlmtmylydt .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vlmtmylydt .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vlmtmylydt .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vlmtmylydt .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vlmtmylydt .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vlmtmylydt .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vlmtmylydt .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vlmtmylydt .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vlmtmylydt .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vlmtmylydt .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vlmtmylydt .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vlmtmylydt .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vlmtmylydt .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vlmtmylydt .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vlmtmylydt .gt_left {
+  text-align: left;
+}
+
+#vlmtmylydt .gt_center {
+  text-align: center;
+}
+
+#vlmtmylydt .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vlmtmylydt .gt_font_normal {
+  font-weight: normal;
+}
+
+#vlmtmylydt .gt_font_bold {
+  font-weight: bold;
+}
+
+#vlmtmylydt .gt_font_italic {
+  font-style: italic;
+}
+
+#vlmtmylydt .gt_super {
+  font-size: 65%;
+}
+
+#vlmtmylydt .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vlmtmylydt .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vlmtmylydt .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vlmtmylydt .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vlmtmylydt .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vlmtmylydt .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vlmtmylydt .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">term</th>
+<th id="estimate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">estimate</th>
+<th id="p_value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">p_value</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">intercept</td>
+<td class="gt_row gt_right" headers="estimate">5.23</td>
+<td class="gt_row gt_right" headers="p_value">0.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">Wt1</td>
+<td class="gt_row gt_right" headers="estimate">1.63</td>
+<td class="gt_row gt_right" headers="p_value">0.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">Sex: Male</td>
+<td class="gt_row gt_right" headers="estimate">0.53</td>
+<td class="gt_row gt_right" headers="p_value">0.03</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>From <a href="#tbl-regtable2" class="quarto-xref">Table&nbsp;4</a> we the estimates for the regression model. We do not receive a coefficient for <span class="math inline">\(\beta_2\)</span> due to the fact that when we fit the model we used Akaike Information Criterion (AIC) to carry out model comparisons. Through this model comparison method, we dropped <span class="math inline">\(Solids_i\)</span> from the model. Additionally, from <a href="#tbl-regtable2" class="quarto-xref">Table&nbsp;4</a> we see that all p-values are close to zero so we conclude the three variables above are statistically significant. Given this information, we conclude the best model is as follows:</p>
+<p><span class="math display">\[
+\widehat{Wt24_i} = 5.23+1.63Wt1_i+0.53\mathbb{I}_{male}+\epsilon_i ~~~~~~~~~~  \epsilon_i\sim N(0, \sigma^2)
+\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-scat3" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scat3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-scat3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scat3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Relationship between Wt24 and Wt1 by Sex with the regression lines superimposed.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-resids2" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resids2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-resids2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resids2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Residuals versus Weight at 1 month (left) and the fitted values (right) by Sex
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-resids2" class="quarto-xref">Figure&nbsp;7</a> displays the residuals verses weight at 1 month split by sex (left) and the residuals versus fitted values split by sex (right). From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers for both sex, these do not appear to be influential.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-residhist2" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residhist2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-residhist2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residhist2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Histograms of the residuals by Sex
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-residhist2" class="quarto-xref">Figure&nbsp;8</a> allows us to check that the residuals are normally distributed for both male and female babies. Although it is neither is a perfect bell curve due to a few outliers, these outleirs do not appear to be influential and we conclude that the residuals appear to follow a normal distribution centered at mean 0.</p>
+<p>We conclude it is reasonable to fit this linear regression model. Through AIC model comparision we determine that the best model does not include the variable <span class="math inline">\(Solids\)</span>. However, we must compare the above model with the model given in <a href="#sec-PM" class="quarto-xref">Section&nbsp;4</a>.</p>
+<div class="cell">
+<div id="tbl-AIC" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-AIC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: AIC values of the 2 modles
+</figcaption>
+<div aria-describedby="tbl-AIC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="sfqteoymap" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#sfqteoymap table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#sfqteoymap thead, #sfqteoymap tbody, #sfqteoymap tfoot, #sfqteoymap tr, #sfqteoymap td, #sfqteoymap th {
+  border-style: none;
+}
+
+#sfqteoymap p {
+  margin: 0;
+  padding: 0;
+}
+
+#sfqteoymap .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#sfqteoymap .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#sfqteoymap .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#sfqteoymap .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#sfqteoymap .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#sfqteoymap .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#sfqteoymap .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#sfqteoymap .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#sfqteoymap .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#sfqteoymap .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#sfqteoymap .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#sfqteoymap .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#sfqteoymap .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#sfqteoymap .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#sfqteoymap .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sfqteoymap .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#sfqteoymap .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#sfqteoymap .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#sfqteoymap .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sfqteoymap .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#sfqteoymap .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sfqteoymap .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#sfqteoymap .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sfqteoymap .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sfqteoymap .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sfqteoymap .gt_left {
+  text-align: left;
+}
+
+#sfqteoymap .gt_center {
+  text-align: center;
+}
+
+#sfqteoymap .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#sfqteoymap .gt_font_normal {
+  font-weight: normal;
+}
+
+#sfqteoymap .gt_font_bold {
+  font-weight: bold;
+}
+
+#sfqteoymap .gt_font_italic {
+  font-style: italic;
+}
+
+#sfqteoymap .gt_super {
+  font-size: 65%;
+}
+
+#sfqteoymap .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#sfqteoymap .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#sfqteoymap .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#sfqteoymap .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#sfqteoymap .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#sfqteoymap .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#sfqteoymap .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border">AIC Comparison Table</th>
+</tr>
+<tr class="odd gt_col_headings">
+<th id="Model" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Model</th>
+<th id="AIC" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">AIC</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Model">Model with Wt1 and Sex</td>
+<td class="gt_row gt_right" headers="AIC">40.50</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Model">Model with Wt1 Only</td>
+<td class="gt_row gt_right" headers="AIC">43.48</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>From <a href="#tbl-AIC" class="quarto-xref">Table&nbsp;5</a> we see that the more favorable model is the model that includes both <span class="math inline">\(Wt1\)</span> and <span class="math inline">\(Sex\)</span> as predictor variables of <span class="math inline">\(Wt24\)</span> due to the lower AIC value.</p>
+<p>To determine if the change in weight from 1 month to 24 months is different for male and female babies we fit the following model:</p>
+<p><span class="math display">\[Wt24_i-Wt1_i=\alpha +\beta\mathbb{I}_{male}+\epsilon_i ~~~~~~~~~~  \epsilon_i\sim N(0, \sigma^2)\]</span></p>
+<p>Where <span class="math inline">\(Wt24_i-Wt1_i\)</span> is the weight change between 24 months and 1 month for the <span class="math inline">\(i\)</span>th baby, <span class="math inline">\(\mathbb{I}_{male}\)</span> is an indicator variable that takes on the following values:</p>
+<p><span class="math display">\[
+I_{\text{male}} =
+\begin{cases}
+1, &amp; \text{if Sex = male} \\
+0, &amp; \text{if Sex = female}
+\end{cases}
+\]</span></p>
+<p>And <span class="math inline">\(\epsilon_i\)</span> is the error term for the <span class="math inline">\(i\)</span>th baby and it is assumed to be normally distributed with mean 0 and variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<div class="cell">
+<div id="tbl-regtable3" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-regtable3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6: Estimates of the regression model coefficients.
+</figcaption>
+<div aria-describedby="tbl-regtable3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="fyicwufjbn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fyicwufjbn table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#fyicwufjbn thead, #fyicwufjbn tbody, #fyicwufjbn tfoot, #fyicwufjbn tr, #fyicwufjbn td, #fyicwufjbn th {
+  border-style: none;
+}
+
+#fyicwufjbn p {
+  margin: 0;
+  padding: 0;
+}
+
+#fyicwufjbn .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#fyicwufjbn .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#fyicwufjbn .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#fyicwufjbn .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#fyicwufjbn .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#fyicwufjbn .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#fyicwufjbn .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#fyicwufjbn .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#fyicwufjbn .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#fyicwufjbn .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#fyicwufjbn .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#fyicwufjbn .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#fyicwufjbn .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#fyicwufjbn .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#fyicwufjbn .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyicwufjbn .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#fyicwufjbn .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#fyicwufjbn .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#fyicwufjbn .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyicwufjbn .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#fyicwufjbn .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyicwufjbn .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#fyicwufjbn .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyicwufjbn .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fyicwufjbn .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyicwufjbn .gt_left {
+  text-align: left;
+}
+
+#fyicwufjbn .gt_center {
+  text-align: center;
+}
+
+#fyicwufjbn .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#fyicwufjbn .gt_font_normal {
+  font-weight: normal;
+}
+
+#fyicwufjbn .gt_font_bold {
+  font-weight: bold;
+}
+
+#fyicwufjbn .gt_font_italic {
+  font-style: italic;
+}
+
+#fyicwufjbn .gt_super {
+  font-size: 65%;
+}
+
+#fyicwufjbn .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#fyicwufjbn .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#fyicwufjbn .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#fyicwufjbn .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#fyicwufjbn .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#fyicwufjbn .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#fyicwufjbn .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">term</th>
+<th id="estimate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">estimate</th>
+<th id="p_value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">p_value</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">intercept</td>
+<td class="gt_row gt_right" headers="estimate">7.82</td>
+<td class="gt_row gt_right" headers="p_value">0.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">Sex: Male</td>
+<td class="gt_row gt_right" headers="estimate">0.79</td>
+<td class="gt_row gt_right" headers="p_value">0.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Since the coefficients displayed in <a href="#tbl-regtable3" class="quarto-xref">Table&nbsp;6</a> are all very close to 0, we conclude that they are all statistically significant and should be kept in the model. Therefore it is reasonable to assume that there is statistically significant evidence that change in weight from 1 month to 24 months is different for male and female babies.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-resids5" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resids5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-resids5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resids5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Residuals versus fitted values by Sex
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-resids5" class="quarto-xref">Figure&nbsp;9</a> displays the fitted values versus the residuals split by sex. From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers for both sex, these do not appear to be influential.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-residhist3" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residhist3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group-1-Project_files/figure-html/fig-residhist3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residhist3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Histograms of the residuals by Sex
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-residhist3" class="quarto-xref">Figure&nbsp;10</a> allows us to check that the residuals are normally distributed for both male and female babies. Although neither it is a perfect bell curve, the residuals appear to follow a normal distribution centered at mean 0 for both male and female babies.</p>
+</section>
 <section id="sec-conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="sec-conclusion">Conclusion</h2>
+<p>In conclusions, based on our explanatory analysis in *** and formal analysis in <a href="#sec-formalanalysis" class="quarto-xref">Section&nbsp;3</a> we believe that….</p>
+<p>We also conclude that this model can be improved by adding the child’s sex however it is not improved by adding their age at introduction to solids. These comparisons and conclusions were done using Akaike Information Criterion as per <a href="#tbl-AIC" class="quarto-xref">Table&nbsp;5</a>. Additionally, we conclude that the change in weight from 1 month to 24 months is different for male and female babies due to the statistical significance of the coefficients seen in <a href="#tbl-regtable3" class="quarto-xref">Table&nbsp;6</a>.</p>
+<p>The limitations of the analysis carried about above is</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>

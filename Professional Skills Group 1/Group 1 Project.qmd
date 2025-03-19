@@ -1,23 +1,44 @@
 ---
-title: "Pro Skills Group Project"
-author: "Group 1"
-format: html
-editor: visual
+title: "Examining Factors That Influence Weight in Children from the Queen Mothers Hospital, Glasgow"
+author: 
+  - name: "Group 1"
+date: "20 March 2025"
+date-format: "MMMM YYYY"
+format:
+  pdf: 
+    documentclass: report
+    titlepage: true
+    title-block-style: default
+    tbl-subcap-labels: true
+    geometry:
+      - inner=3cm
+      - outer=4.2cm  # Slightly wider outer margin
+      - top=3cm
+      - bottom=4cm
+      - headsep=22pt
+      - headheight=11pt
+      - footskip=33pt
+      - ignorehead
+      - ignorefoot
+      - heightrounded
+    papersize: a4
+    tbl-pos: "ht" # Attempt to place tables here first
+    fig-pos: "htbp" #Figures can try here, top, bottom, or page
 ---
 
 ## Introduction
 
 Steadily increasing weight is an indicator of a healthy child. Weight change differs between children, so it is of interest to know what factors influence a child's weight. A study conducted at the Queen Mothers hospital in Glasgow sampled 127 new born babies gathered the following variables:
 
-`Wt24`  - The child's weight at 24 months (numerical variable, continuous).
+`Wt24` - The child's weight at 24 months (numerical variable, continuous).
 
-`Wt1`  - The child's weight at 1 month (numerical variable, continuous).
+`Wt1` - The child's weight at 1 month (numerical variable, continuous).
 
-`Solids`  - The age at which the child was first introduced to solid food (numerical variable, discrete).
+`Solids` - The age at which the child was first introduced to solid food (numerical variable, discrete).
 
 `Sex` - The child's sex (categorical variable, with categories Male or Female).
 
-The goal of this report is to examine which variables influence `Wt24` first by assessing how well `Wt24` can be predicted using a linear model with `Wt1` as an explanatory variable. We then see if the model if improved by adding `Sex` or `Solids` to the model. Finally, we see if there is any evidence that the difference in weight (`Wt24`  - `Wt1`) is different for male and female children.
+The goal of this report is to examine which variables influence A child's weight at 24 months first by assessing how well `Wt24` can be predicted using a linear model with `Wt1` as an explanatory variable. We then see if the model if improved by adding `Sex` or `Solids` to the model. Finally, we see if there is any evidence that the difference in weight (`Wt24` - `Wt1`) is different for male and female children.
 
 @sec-exploratory consists of exploratory analysis explores the potential relationships between variables by use of data visualisation and numerical summaries. @sec-formalanalysis uses linear regression modelling to answer the questions of interest. @sec-conclusion summarisises the findings of the report as well as discuss some limitations of the study.
 
@@ -44,16 +65,11 @@ data <- read.csv("~/Downloads/project1-growth-wt.csv")
 ```{r}
 #| echo: false
 #| warning: false
-#| fig-cap: Relationship between Wt24 and numerical explanatory variables coloured by sex
-#| fig-subcap: 
-#| - Relationship between weight at 24 months and weight at 1 month, coloured by sex
-#| - Relationship between weight at 24 months and age at introduction to solids, coloured by sex
+#| fig-cap: Scatterplots of Wt24 against Wt1  coloured by sex (left) and  Wt24 against Solids coloured by sex (right)
 #| label: fig-scat-wt24-wt1
-#| layout-ncol: 2
 #| fig-align: center
-#| fig-width: 4.5
-#| fig-height: 3.5
 #| fig-cap-location: top
+
 PlotWt1 <-  ggplot(data, aes(x = Wt1, y = Wt24, color = Sex)) +
            geom_point() +
           labs(x = "Weight at 1 month (kg)", y = "Weight at 24 months (kg)", color = "Sex") +             theme_minimal()
@@ -67,47 +83,31 @@ PlotSolids <- ggplot(data, aes(x = Solids, y = Wt24, color = Sex)) +
                   color = "Sex") +
                   theme_minimal()
 
-PlotWt1
-PlotSolids
+PlotWt1+PlotSolids+plot_layout(ncol=2)
 ```
 
-@fig-scat-wt24-wt1 shows the relationship between the response `Wt24` and explanatory variables, namely `Wt1` and `Solids`. From @fig-scat-wt24-wt1-1 it appears that there is a positive, moderate to strong linear relationship between `Wt24` and `Wt1`. Moreover, with the exception of a few points there appears to be a distinction by `Sex` with female children having lower weight and male children having a higher weight. @fig-scat-wt24-wt1-2 illustrates the relationship between `Wt24` and `Solids`, with separate regression lines for males and females. The plot suggests a moderate negative linear relationship for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weak relationship between `Wt24` and `Solids` for male children.
+@fig-scat-wt24-wt1 produces a scatterplot of `Wt24` against `Wt1` (left) and `Wt24` aginst `Solids` to assess a potential relationship between the response and explanatory variables. From the scatterplot of `Wt24` against `Wt1`it appears that there is a positive, moderate to strong linear relationship between `Wt24` and `Wt1`. Moreover, with the exception of a few points there appears to be a distinction by `Sex` with female children having lower weight and male children having a higher weight. The scatterplot of `Wt24` against `Solids` examines the relationship by having separate regression lines for males and females. The plot suggests a moderate negative linear relationship for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weak relationship between `Wt24` and `Solids` for male children.
 
 ```{r}
 #| echo: false
 #| warning: false
-#| fig-cap: Boxplots of weight at 24 months and weight at 1 month by sex
-#| fig-subcap: 
-#| - Distribution of weight at 1 month by sex
-#| - Distribution of wight at 24 months by sex
+#| fig-cap: Boxplots of weight at 24 months by sex (left) and weight at 1 month by sex (right)
 #| label: fig-boxplots
-#| layout-ncol: 2
 #| fig-align: center
-#| fig-width: 4.5
-#| fig-height: 3.5
 #| fig-cap-location: top
 
 Wt24.boxplot <- ggplot(data, aes(x = Sex, y = Wt24, fill = Sex)) +
   geom_boxplot(alpha = 0.7) +
-  labs(x = "Sex", y = "Weight (kg)") +
+  labs(x = "Sex", y = "Weight at 24 months (kg)") +
   theme_minimal()
-
 Wt1.Boxplot <- ggplot(data, aes(x = Sex, y = Wt1, fill = Sex)) +
   geom_boxplot(alpha = 0.7) +
-  labs(x = "Sex", y = "Weight (kg)") +
+  labs(x = "Sex", y = "Weight at 1 month (kg)") +
   theme_minimal()
-Wt1.Boxplot
-Wt24.boxplot
+Wt1.Boxplot+Wt24.boxplot+plot_layout(ncol=2)
 ```
 
-@fig-boxplots-1 presents a boxplot illustrating the distribution of `Wt1` categorised by `Sex`. The plot suggests that male children tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution. @fig-boxplots-2 extends this analysis to `Wt24`, where the observed trend continues. Male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.
-
-```{r}
-#| echo: false
-#| warning: false
-cors.male <- data |> filter(,Sex=="Male") |> correlate(,diagonal = 1)
-cors.female <- data |> filter(,Sex=="Female") |> correlate(,diagonal = 1)
-```
+@fig-boxplots presents boxplots illustrating the distribution of `Wt24` and `Wt1` categorised by `Sex`. The boxplot of `Wt1` grouped by `Sex` suggests that male children tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution. The boxplot of `Wt24` grouped by `Sex` highlights that male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.
 
 ```{r}
 #| echo: false
@@ -119,7 +119,8 @@ cors.female <- data |> filter(,Sex=="Female") |> correlate(,diagonal = 1)
 #| layout-ncol: 2
 #| tbl-cap-location: top
 #| label: tbl-corrs
-
+cors.male <- data |> filter(,Sex=="Male") |> correlate(,diagonal = 1)
+cors.female <- data |> filter(,Sex=="Female") |> correlate(,diagonal = 1)
 # Male table
 male_table <- cors.male |> 
   gt() |> 
@@ -137,12 +138,13 @@ male_table
 female_table
 ```
 
-@tbl-corrs shows the correlation between numerical variables for male and female children. For male children @tbl-corrs-1 highlights that for male children `Wt1` and `Wt24` are moderately, positivley correlated, whereas `Solids` against `Wt24` and `Wt1` are weakly negatively correlated. This is slightly different for female children as from @tbl-corrs-2 there appears to be a higher positive correlation between `Wt24` and `Wt1`. Additionally, there appears to be a moderate negative correlation between `Solids` and `Wt24` for female children and a weak-moderate correlation between `Solids` and `Wt1`.
+@tbl-corrs shows the correlation between numerical variables for male and female children. For male children @tbl-corrs-1 highlights that for male children `Wt1` and `Wt24` are moderately, positively correlated, whereas `Solids` against `Wt24` and `Wt1` are weakly negatively correlated. This is slightly different for female children as from @tbl-corrs-2 there appears to be a higher positive correlation between `Wt24` and `Wt1`. Additionally, there appears to be a moderate negative correlation between `Solids` and `Wt24` for female children and a weak-moderate correlation between `Solids` and `Wt1`.
 
 ```{r}
 #| echo: false
 #| label: tbl-summary
 #| tbl-cap:  Mean, median and standard deviation (sd) Wt24, Wt1 and Solids by sex.
+#| tbl-cap-location: top
 data |>
    summarize('Wt24.Mean' = mean(Wt24),
              'Wt24.Median' = median(Wt24),
@@ -183,9 +185,275 @@ data |>
 
 @tbl-summary shows the mean, median and standard deviation of `Wt24`, `Wt1` and `Solids` by `Sex`. On average, there appears to be a slight difference in `Wt24` and `Wt1`by `Sex`. There does not appear to be a difference in `Solids` by `Sex` on average.
 
-## Formal Analysis  {#sec-formalanalysis}
+## Formal Analysis {#sec-formalanalysis}
+
+## Primary Model {#sec-PM}
+
+To investigate how well weight at 24 months can be predicted using a linear model with weight at 1 month as the explanatory variable, we begin by fitting the following regression model, written as:
+
+$${Wt24_i} = \alpha+\beta\ Wt1_i + \epsilon_i, ~~~ \epsilon_i\sim N(0, \sigma^2)$$ {#eq-regparam}
+
+Where, $\alpha$ is the intercept, $\beta$ is the slope, $Wt24_i$ and $Wt1_i$ is `Wt24` and `Wt1` for the $i$th child. Note that, whilst the intercept is biologically meaningless this parameter is necessary.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+int.model <- lm(Wt24 ~ Wt1, data)
+step.model <- stepAIC(int.model, direction = "backward", trace = FALSE)
+Coefs <- round(coef(step.model), 3)
+AIC <- step.model$anova[, 6]
+```
+
+```{r}
+#| echo: false
+#| label: tbl-regtable
+#| tbl-cap: Estimates of the regression model coefficients.
+#| tbl-cap-location: top
+get_regression_table(step.model)[, c(1, 2, 5)] |>
+  gt() |> 
+  fmt_number(decimals=2) |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+```
+
+@tbl-regtable shows the parameter estimates and p-values for @eq-regparam. From this we get the following fitted model:
+
+$$\widehat{Wt24_i}=4.82+1.80Wt1_i$$ {#eq-model1}
+
+The p-value for `Wt1` is close to zero, thus `Wt1` is statistically significant in predicting `Wt24` . The fitted model can be interpreted as follows, for a $1$kg increase in `Wt1`, we would expect `Wt24` to increase by 1.80kg, and, holding `Wt1` constant we would expect `Wt24` to be 4.82kg.
+
+```{r}
+#| echo: false
+#| label: fig-scat2
+#| message: false
+#| fig-cap: Relationship between Weight at 1 Month and Weight at 24 months with regression line superimposed.
+#| fig-width: 2
+#| fig-height: 3
+#| fig-align: center
+#| fig-cap-location: top
+
+ggplot(data, aes(x = Wt1, y = Wt24)) +
+  geom_point() +
+  labs(x = "Weight at 1 Month (kg)", y = "Weight at 24 Months (kg)") +
+  geom_smooth(method = "lm", se = FALSE) + theme_minimal()
+```
+
+@fig-scat2 shows a plot of `Wt24` against `Wt1` with the regression model superimposed. The model appears to fit the data well, although we do see some outliers they do not appear to be influential.
+
+```{r}
+#| echo: false
+#| 
+regression.points <- get_regression_points(int.model)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-cap: Residuals against fitted values (left) and histogram of residuals (right)
+#| label: fig-resids
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+#| fig-cap-location: top
+
+p1 <- ggplot(regression.points, aes(x = Wt24_hat, y = residual)) + 
+  geom_point() + 
+  labs(x = "Weight at 1 Month (kg)", y = "Residual") + 
+  geom_hline(yintercept = 0, col = "blue", linewidth = 1)
+
+hist.residuals <- ggplot(regression.points, aes(x = residual)) +
+      geom_histogram( color = "white") +
+      labs(x = "Residual") 
+
+
+p1 + hist.residuals + plot_layout(ncol = 2)
+```
+
+@fig-resids displays the residuals against fitted values (left) and a histogram of the residuals (right). From the plot of residuals against fitted values, it is reasonable to assume that the residuals have mean zero and constant variance as the points are scattered evenly above and below the line, and there does not appear to be any patterns such as fanning. The histogram of residuals allows us to check that the residuals are normally distributed. Although there appears to be some extremes far from the center of the data, the residuals appear to be normally distributed.
+
+## Secondary Models
+
+To determine if the model in @eq-regparam can be improved by adding the child's sex and/or age at introduction to solids as further explanatory variables we fit the following model:
+
+$${Wt24_i} = {\alpha} +{\beta_1} Wt_i + {\beta_2} Solids_i + {\beta_3}\mathbb{I}_{male}+\epsilon_i,  ~~~~~  \epsilon_i\sim N(0, \sigma^2)$$
+
+Where, $\alpha$ is the intercept, $Wt24_i$, $Wt1_i$ and $Solids_i$, is `Wt24`, `Wt1` and `Solids` for the $i$th child. $\beta_1$ and $\beta_2$ are the slope terms for `Wt1` and `Solids` respectively. $\beta_3$ represents the change in `Wt24` by `Sex` with $\mathbb{I}_{male}$ being an indicator variable that takes the following value 1 if the child is male, and 0 if the child is female.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+int.model2 <- lm(Wt24 ~ Wt1 + Solids + Sex, data)
+step.model2 <- stepAIC(int.model2, direction = "backward", trace = FALSE)
+Coefs2 <- round(coef(step.model2), 3)
+AIC2 <- step.model2$anova[, 6]
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-regtable2
+#| tbl-cap: Estimates of the regression model coefficients.
+#| tbl-cap-location: top
+get_regression_table(step.model2)[, c(1, 2, 5)] |>
+  gt() |> 
+  fmt_number(decimals=2) |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+```
+
+@tbl-regtable2 shows the estimates for the fitted regression model. We do not receive a coefficient for $\beta_2$ due to the fact that when we fit the model we used Akaike Information Criterion (AIC) to carry out model comparisons. Through this model comparison method, we dropped $Solids_i$ from the model. Additionally, from @tbl-regtable2 we see that all p-values are close to zero so we conclude the three variables above are statistically significant. Given this information, we conclude the best model is as follows:
+
+$$
+\widehat{Wt24_i} = 5.23+1.63Wt1_i+0.53\mathbb{I}_{male}
+$$ {#eq-final}
+
+```{r}
+#| echo: false
+#| label: fig-scat3
+#| message: false
+#| fig-cap: Relationship between Wt24 and Wt1 by Sex with the regression lines superimposed.
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+#| fig-cap-location: top
+
+ggplot(data, aes(x = Wt1, y = Wt24, color = Sex)) +
+  geom_point() +
+  labs(x = "Weight at 1 month (kg)", y = "Weight at 24 months (kg)", color = "Sex") +
+  geom_smooth(method = "lm", se = FALSE) + theme_minimal()
+```
+
+@fig-scat3 shows as scatterplot of `Wt24` against `Wt1` coloured by `Sex`, with separate regression lines for male and female children. Although we do see some outliers towards the top of @fig-scat3 for males and towards the bottom for females, these do not appear to be influential.
+
+```{r}
+#| echo: false
+regression.points2 <- get_regression_points(int.model2)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-cap: Residuals versus fitted values by sex (left) and Histogram of residuals (right)
+#| label: fig-resids2
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+#| fig-cap-location: top
+p2 <- ggplot(regression.points2, aes(x = Wt24_hat, y = residual)) +
+      geom_point() +
+      labs(x = "Fitted values", y = "Residual") +
+      geom_hline(yintercept = 0, col = "blue", linewidth = 1) +
+      facet_wrap(~ Sex)
+resid.model.check <- ggplot(regression.points2, aes(x = residual)) +
+      geom_histogram( color = "white") +
+      labs(x = "Residual") 
+p1+resid.model.check+plot_layout(ncol=2)
+```
+
+@fig-resids2 displays the residuals versus fitted values split by sex (left) and a histogram of residuals (right). From the residuals against fitted values plot it is reasonable to assume that the residuals have mean zero and constant variance as the points appear to be evenly scattered above and below the line and there does not seem to be any pattern among the residuals. From the histogram of residuals we can see that although it is not a perfect bell curve due to a few outliers, the residuals approximatley follow a normal distribution. We conclude that it is reasonable to fit this linear regression model. However, we compare the models given in @eq-regparam and @eq-final using AIC.
+
+```{r}
+#| echo: false
+#| label: tbl-AIC
+#| tbl-cap: AIC values of the 2 modles
+#| tbl-cap-location: top
+
+AIC_table <- data.frame(
+  Model = c("Model with Wt1 and Sex", "Model with Wt1 Only"),
+  AIC = c(40.5, AIC)
+)
+AIC_table |>
+  gt() |>
+  fmt_number(columns = 2, decimals = 2) |>  # Round AIC values to 2 decimal places
+  tab_style(
+    style = cell_text(weight = "bold"),  # Bold column labels
+    locations = cells_column_labels()
+  ) |>
+  tab_header(title = "AIC Comparison Table")
+```
+
+From @tbl-AIC we see that the more favorable model is the model that includes both `Wt1` and `Sex` as predictor variables of `Wt24` due to having a lower AIC.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+data$Weight_Change <- data$Wt24-data$Wt1
+```
+
+To determine if the change in weight from 1 month to 24 months is different for male and female children, define `WtDiff` = `Wt24` - `Wt1` to represent the change in weight between 1 month and 24 months for the $i$th child and fit the following one-way ANOVA model:
+
+$$WtDiff_i=\alpha +\beta\mathbb{I}_{male}+\epsilon_i, ~~~~~~~~  \epsilon_i\sim N(0, \sigma^2)$$
+
+Where $WtDiff_i$ is the difference in weight for the $i$th child, $\alpha$ is the intercept, $\mathbb{I}_{male}$ is an indicator variable that takes on the value 1 if the child is male and 0 if the child is female and $\beta$ represents the shift in weight difference for male compared to female children.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+int.model3 <- lm(Weight_Change~ Sex, data)
+step.model3 <- stepAIC(int.model3, direction = "backward", trace = FALSE)
+Coefs3 <- round(coef(step.model3), 3)
+AIC3 <- step.model3$anova[, 6]
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-regtable3
+#| tbl-cap: Estimates of the regression model coefficients.
+get_regression_table(step.model3)[, c(1, 2, 5)] |>
+  gt() |> 
+  fmt_number(decimals=2) |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+```
+
+Since the coefficients displayed in @tbl-regtable3 are all very close to 0, we conclude that they are all statistically significant and should be kept in the model.
+
+```{r}
+#| echo: false
+#| warning: false
+regression.points3 <- get_regression_points(int.model3)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-cap: Residuals versus fitted values by sex (left) and Histogram of residuals (right)
+#| label: fig-resids5
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: center
+#| fig-cap-location: top
+
+reside.fit.model3 <- ggplot(regression.points3, aes(x = Weight_Change_hat, y = residual)) +
+      geom_point() +
+      labs(x = "Fitted values", y = "Residual") +
+      geom_hline(yintercept = 0, col = "blue", linewidth = 1) +
+      facet_wrap(~ Sex)
+
+hist.model3 <- ggplot(regression.points3, aes(x = residual)) +
+      geom_histogram( color = "white") +
+      labs(x = "Residual") 
+reside.fit.model3+hist.model3+plot_layout(ncol = 2)
+```
+
+@fig-resids5 displays the fitted values versus the residuals split by sex as well as a histogram of residuals. From the residuals versus fitted values plot it is reasonable to assume that residuals have mean zero and constant variance as there appears to be the same number of observations both above and below and there does not appear to be any patterns such as fanning. Although we do see some outliers for both sex, these do not appear to be influential. From the histogram of the residuals we can see that although there appears to be a few extremes, the residuals appear to follow a normal distribution.
+
+Since the model assumptions are satisfied it is reasonable to assume that there is statistically significant evidence that change in weight from 1 month to 24 months is different for male and female babies.
 
 ## Conclusion {#sec-conclusion}
+
+In conclusions, based on our explanatory analysis in \*\*\* and formal analysis in @sec-formalanalysis we believe that....
+
+We also conclude that this model can be improved by adding the child's sex however it is not improved by adding their age at introduction to solids. These comparisons and conclusions were done using Akaike Information Criterion as per @tbl-AIC. Additionally, we conclude that the change in weight from 1 month to 24 months is different for male and female babies due to the statistical significance of the coefficients seen in @tbl-regtable3.
+
+The limitations of the analysis carried about above is
 
 ## References
 

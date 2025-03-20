@@ -495,7 +495,7 @@ In conclusions, based on our explanatory analysis in \*\*\* and formal analysis 
 
 We also conclude that this model can be improved by adding the child's sex however it is not improved by adding their age at introduction to solids. These comparisons and conclusions were done using Akaike Information Criterion as per @tbl-AIC. Additionally, we conclude that the change in weight from 1 month to 24 months is different for male and female babies due to the statistical significance of the coefficients seen in @tbl-regtable3.
 
-The limitations of the analysis carried about above is
+The analysis carried about above has several limitations that impact the generalizability and accuracy of its findings. The dataset consists of only 127 babies from a single hospital in Glasgow, which may not be representative of broader populations. While additional variables such as sex and age at introduction to solids are considered, key factors like parental health, nutrition quality, and socioeconomic status are not included, potentially leading to omitted variable bias. The analysis also does not fully account for sex-based growth differences, potential measurement errors, or missing data handling, which could introduce further inaccuracies. To improve predictive accuracy, future research should incorporate larger, more diverse datasets, additional explanatory variables, and more advanced modeling techniques such as machine learning.
 
 ## References
 

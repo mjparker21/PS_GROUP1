@@ -7,7 +7,6 @@ format:
 editor: visual
 ---
 
-
 ## Introduction
 
 Steadily increasing weight is an indicator of a healthy child. Weight change differs between children, so it is of interest to know what factors influence a child's weight. A study conducted at the Queen Mothers hospital in Glasgow sampled 127 new born babies gathered the following variables:
@@ -23,7 +22,6 @@ Steadily increasing weight is an indicator of a healthy child. Weight change dif
 The goal of this report is to examine which variables influence `Wt24` first by assessing how well `Wt24` can be predicted using a linear model with `Wt1` as an explanatory variable. We then see if the model if improved by adding `Sex` or `Solids` to the model. Finally, we see if there is any evidence that the difference in weight (`Wt24` - `Wt1`) is different for male and female children.
 
 @sec-exploratory consists of exploratory analysis explores the potential relationships between variables by use of data visualisation and numerical summaries. @sec-formalanalysis uses linear regression modelling to answer the questions of interest. @sec-conclusion summarisises the findings of the report as well as discuss some limitations of the study.
-
 
 ```{r}
 #| echo: false
@@ -43,9 +41,7 @@ data <- read.csv("~/Downloads/project1-growth-wt.csv")
 
 ```
 
-
 ## Exploratory Analysis {#sec-exploratory}
-
 
 ```{r}
 #| echo: false
@@ -77,9 +73,7 @@ PlotWt1
 PlotSolids
 ```
 
-
 @fig-scat-wt24-wt1 shows the relationship between the response `Wt24` and explanatory variables, namely `Wt1` and `Solids`. From @fig-scat-wt24-wt1-1 it appears that there is a positive, moderate to strong linear relationship between `Wt24` and `Wt1`. Moreover, with the exception of a few points there appears to be a distinction by `Sex` with female children having lower weight and male children having a higher weight. @fig-scat-wt24-wt1-2 illustrates the relationship between `Wt24` and `Solids`, with separate regression lines for males and females. The plot suggests a moderate negative linear relationship for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weak relationship between `Wt24` and `Solids` for male children.
-
 
 ```{r}
 #| echo: false
@@ -108,9 +102,7 @@ Wt1.Boxplot
 Wt24.boxplot
 ```
 
-
 @fig-boxplots-1 presents a boxplot illustrating the distribution of `Wt1` categorised by `Sex`. The plot suggests that male children tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution. @fig-boxplots-2 extends this analysis to `Wt24`, where the observed trend continues. Male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.
-
 
 ```{r}
 #| echo: false
@@ -147,9 +139,7 @@ male_table
 female_table
 ```
 
-
 @tbl-corrs shows the correlation between numerical variables for male and female children. For male children @tbl-corrs-1 highlights that for male children `Wt1` and `Wt24` are moderately, positivley correlated, whereas `Solids` against `Wt24` and `Wt1` are weakly negatively correlated. This is slightly different for female children as from @tbl-corrs-2 there appears to be a higher positive correlation between `Wt24` and `Wt1`. Additionally, there appears to be a moderate negative correlation between `Solids` and `Wt24` for female children and a weak-moderate correlation between `Solids` and `Wt1`.
-
 
 ```{r}
 #| echo: false
@@ -193,7 +183,6 @@ data |>
   )
 ```
 
-
 @tbl-summary shows the mean, median and standard deviation of `Wt24`, `Wt1` and `Solids` by `Sex`. On average, there appears to be a slight difference in `Wt24` and `Wt1`by `Sex`. There does not appear to be a difference in `Solids` by `Sex` on average.
 
 ## Formal Analysis {#sec-formalanalysis}
@@ -205,7 +194,6 @@ To investigate how well weight at 24 months can be predicted using a linear mode
 $$\widehat{Wt24_i} = \hat{\alpha}+\hat{\beta}\ Wt1_i + \epsilon_i ~~~~~  \epsilon_i\sim N(0, \sigma^2)$$
 
 Where $Wt24_i$ is the weight of the $i$th baby at 24 months. $Wt1_i$ is the weight of the $i$th baby at 1 month. $\alpha$ is the intercept. That is, it is the predicted weight at 24 months when $Wt1=0$, whilst biologically meaningless this parameter is necessary. $\beta$ is the slope. That is, it is the average change in weight at 24 months for each additional kilogram increase in weight at 1 months. $\epsilon_i$ is the error term for the $i$th baby and it is assumed to be normally distributed with mean 0 and variance $\sigma^2$.
-
 
 ```{r}
 #| echo: false
@@ -229,11 +217,9 @@ get_regression_table(step.model)[, c(1, 2, 5)] |>
             locations = cells_column_labels())
 ```
 
-
 From @tbl-regtable we see the coefficients for the model. We sub these values into our mathematical equation above to obtain the regression line below. All p-values appear to be close to zero, that is both coefficents are appear to be statistically significant.
 
 $$\widehat{Wt24_i}=4.82+1.80Wt1_i+\epsilon_i$$ That is, for every $1$kg increase in weight at 1 month, we would expect weight at 24 months would increase by 1.80kg. And, for a baby whose weight a 1 month is 0kg we would expect their weight at 24 months to be 4.82kg.
-
 
 ```{r}
 #| echo: false
@@ -280,9 +266,7 @@ p2 <- ggplot(regression.points, aes(x = Wt24_hat, y = residual)) +
 p1 + p2 + plot_layout(ncol = 2)
 ```
 
-
 @fig-resids displays the residuals verses weight at 1 month (left) and the residuals versus fitted values (right). From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers, these do not appear to be influential.
-
 
 ```{r}
 #| echo: false
@@ -299,7 +283,6 @@ ggplot(regression.points, aes(x = residual)) +
       geom_histogram( color = "white") +
       labs(x = "Residual") 
 ```
-
 
 @fig-residhist allows us to check that the residuals are normally distributed. Although it is not a perfect bell curve, the residuals appear to follow a normal distribution centered at mean 0.
 
@@ -320,7 +303,6 @@ I_{\text{male}} =
 $$
 
 And $\epsilon_i$ is the error term for the $i$th baby and it is assumed to be normally distributed with mean 0 and variance $\sigma^2$.
-
 
 ```{r}
 #| echo: false
@@ -345,13 +327,11 @@ get_regression_table(step.model2)[, c(1, 2, 5)] |>
             locations = cells_column_labels())
 ```
 
-
 From @tbl-regtable2 we the estimates for the regression model. We do not receive a coefficient for $\beta_2$ due to the fact that when we fit the model we used Akaike Information Criterion (AIC) to carry out model comparisons. Through this model comparison method, we dropped $Solids_i$ from the model. Additionally, from @tbl-regtable2 we see that all p-values are close to zero so we conclude the three variables above are statistically significant. Given this information, we conclude the best model is as follows:
 
 $$
 \widehat{Wt24_i} = 5.23+1.63Wt1_i+0.53\mathbb{I}_{male}+\epsilon_i ~~~~~~~~~~  \epsilon_i\sim N(0, \sigma^2)
 $$
-
 
 ```{r}
 #| echo: false
@@ -398,9 +378,7 @@ p2 <- ggplot(regression.points2, aes(x = Wt24_hat, y = residual)) +
 p1+p2+plot_layout(ncol=2)
 ```
 
-
 @fig-resids2 displays the residuals verses weight at 1 month split by sex (left) and the residuals versus fitted values split by sex (right). From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers for both sex, these do not appear to be influential.
-
 
 ```{r}
 #| echo: false
@@ -419,11 +397,9 @@ ggplot(regression.points2, aes(x = residual)) +
       facet_wrap(~ Sex)
 ```
 
-
 @fig-residhist2 allows us to check that the residuals are normally distributed for both male and female babies. Although it is neither is a perfect bell curve due to a few outliers, these outleirs do not appear to be influential and we conclude that the residuals appear to follow a normal distribution centered at mean 0.
 
 We conclude it is reasonable to fit this linear regression model. Through AIC model comparision we determine that the best model does not include the variable $Solids$. However, we must compare the above model with the model given in @sec-PM.
-
 
 ```{r}
 #| echo: false
@@ -444,9 +420,7 @@ AIC_table |>
   tab_header(title = "AIC Comparison Table")
 ```
 
-
 From @tbl-AIC we see that the more favorable model is the model that includes both $Wt1$ and $Sex$ as predictor variables of $Wt24$ due to the lower AIC value.
-
 
 ```{r}
 #| echo: false
@@ -458,7 +432,6 @@ data$Weight_Change <- data$Wt24-data$Wt1
 
 
 ```
-
 
 To determine if the change in weight from 1 month to 24 months is different for male and female babies we fit the following model:
 
@@ -475,7 +448,6 @@ I_{\text{male}} =
 $$
 
 And $\epsilon_i$ is the error term for the $i$th baby and it is assumed to be normally distributed with mean 0 and variance $\sigma^2$.
-
 
 ```{r}
 #| echo: false
@@ -500,9 +472,7 @@ get_regression_table(step.model3)[, c(1, 2, 5)] |>
             locations = cells_column_labels())
 ```
 
-
 Since the coefficients displayed in @tbl-regtable3 are all very close to 0, we conclude that they are all statistically significant and should be kept in the model. Therefore it is reasonable to assume that there is statistically significant evidence that change in weight from 1 month to 24 months is different for male and female babies.
-
 
 ```{r}
 #| echo: false
@@ -528,9 +498,7 @@ regression.points3 <- get_regression_points(int.model3)
 
 ```
 
-
 @fig-resids5 displays the fitted values versus the residuals split by sex. From these plots it is reasonable to assume that residuals have mean zero and constant variance as there does not appear to be any patterns such as fanning. There also appears to be the same number of observations both above and below the line. Although we do see some outliers for both sex, these do not appear to be influential.
-
 
 ```{r}
 #| echo: false
@@ -549,7 +517,6 @@ ggplot(regression.points3, aes(x = residual)) +
       facet_wrap(~ Sex)
 ```
 
-
 @fig-residhist3 allows us to check that the residuals are normally distributed for both male and female babies. Although neither it is a perfect bell curve, the residuals appear to follow a normal distribution centered at mean 0 for both male and female babies.
 
 ## Conclusion {#sec-conclusion}
@@ -565,4 +532,3 @@ The limitations of the analysis carried about above is
 -   <https://www.nhs.uk/conditions/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/>
 
 -   <https://www.babycenter.com/baby/baby-development/average-weight-and-growth-chart-for-babies-toddlers-and-beyo_10357633>
-

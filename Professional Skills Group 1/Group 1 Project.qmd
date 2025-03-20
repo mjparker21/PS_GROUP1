@@ -5,8 +5,13 @@ author:
 date: "20 March 2025"
 date-format: "MMMM YYYY"
 format:
-  pdf: 
-    documentclass: report
+  pdf:
+    includes:
+      in-header: |
+        \usepackage{placeins}
+        \usepackage{wrapfig}
+    documentclass: article
+    number-sections: true
     titlepage: true
     title-block-style: default
     tbl-subcap-labels: true
@@ -68,7 +73,12 @@ data <- read.csv("~/Downloads/project1-growth-wt.csv")
 #| fig-cap: Scatterplots of Wt24 against Wt1  coloured by sex (left) and  Wt24 against Solids coloured by sex (right)
 #| label: fig-scat-wt24-wt1
 #| fig-align: center
+#| fig-pos: "htpb"
+#| fig-auto: true
+#| fig-width: 6
+#| fig-height: 3
 #| fig-cap-location: top
+#| latex-options: "wrapfig"
 
 PlotWt1 <-  ggplot(data, aes(x = Wt1, y = Wt24, color = Sex)) +
            geom_point() +
@@ -95,7 +105,11 @@ PlotWt1+PlotSolids+plot_layout(ncol=2)
 #| label: fig-boxplots
 #| fig-align: center
 #| fig-cap-location: top
-
+#| fig-pos: "htbp"
+#| fig-auto: true
+#| fig-width: 6
+#| fig-height: 3
+#| latex-options: "wrapfig"
 Wt24.boxplot <- ggplot(data, aes(x = Sex, y = Wt24, fill = Sex)) +
   geom_boxplot(alpha = 0.7) +
   labs(x = "Sex", y = "Weight at 24 months (kg)") +
@@ -112,6 +126,8 @@ Wt1.Boxplot+Wt24.boxplot+plot_layout(ncol=2)
 ```{r}
 #| echo: false
 #| warning: false
+#| tbl-pos: "htbp"
+#| tbl-auto: true
 #| tbl-cap: Correlations between numerical variables by sex
 #| tbl-subcap: 
 #|  - Correlations for numerical variables for male children
@@ -119,6 +135,7 @@ Wt1.Boxplot+Wt24.boxplot+plot_layout(ncol=2)
 #| layout-ncol: 2
 #| tbl-cap-location: top
 #| label: tbl-corrs
+#| latex-options: "wrapfig"
 cors.male <- data |> filter(,Sex=="Male") |> correlate(,diagonal = 1)
 cors.female <- data |> filter(,Sex=="Female") |> correlate(,diagonal = 1)
 # Male table
@@ -187,7 +204,7 @@ data |>
 
 ## Formal Analysis {#sec-formalanalysis}
 
-## Primary Model {#sec-PM}
+### Primary Model {#sec-PM}
 
 To investigate how well weight at 24 months can be predicted using a linear model with weight at 1 month as the explanatory variable, we begin by fitting the following regression model, written as:
 
@@ -225,11 +242,12 @@ The p-value for `Wt1` is close to zero, thus `Wt1` is statistically significant 
 
 ```{r}
 #| echo: false
+#| fig-pos: "h"
 #| label: fig-scat2
 #| message: false
 #| fig-cap: Relationship between Weight at 1 Month and Weight at 24 months with regression line superimposed.
 #| fig-width: 2
-#| fig-height: 3
+#| fig-height: 2.5
 #| fig-align: center
 #| fig-cap-location: top
 
@@ -250,10 +268,11 @@ regression.points <- get_regression_points(int.model)
 ```{r}
 #| echo: false
 #| warning: false
+#| fig-pos: "h"
 #| fig-cap: Residuals against fitted values (left) and histogram of residuals (right)
 #| label: fig-resids
-#| fig-width: 4
-#| fig-height: 3
+#| fig-width: 3
+#| fig-height: 2.5
 #| fig-align: center
 #| fig-cap-location: top
 
@@ -272,7 +291,7 @@ p1 + hist.residuals + plot_layout(ncol = 2)
 
 @fig-resids displays the residuals against fitted values (left) and a histogram of the residuals (right). From the plot of residuals against fitted values, it is reasonable to assume that the residuals have mean zero and constant variance as the points are scattered evenly above and below the line, and there does not appear to be any patterns such as fanning. The histogram of residuals allows us to check that the residuals are normally distributed. Although there appears to be some extremes far from the center of the data, the residuals appear to be normally distributed.
 
-## Secondary Models
+### Secondary Models
 
 To determine if the model in @eq-regparam can be improved by adding the child's sex and/or age at introduction to solids as further explanatory variables we fit the following model:
 
@@ -315,8 +334,8 @@ $$ {#eq-final}
 #| label: fig-scat3
 #| message: false
 #| fig-cap: Relationship between Wt24 and Wt1 by Sex with the regression lines superimposed.
-#| fig-width: 4
-#| fig-height: 3
+#| fig-width: 2
+#| fig-height: 2
 #| fig-align: center
 #| fig-cap-location: top
 
@@ -426,9 +445,11 @@ regression.points3 <- get_regression_points(int.model3)
 #| warning: false
 #| fig-cap: Residuals versus fitted values by sex (left) and Histogram of residuals (right)
 #| label: fig-resids5
-#| fig-width: 4
+#| fig-width: 3
 #| fig-height: 3
 #| fig-align: center
+#| fig-pos: "H"
+#| fig-auto: true
 #| fig-cap-location: top
 
 reside.fit.model3 <- ggplot(regression.points3, aes(x = Weight_Change_hat, y = residual)) +

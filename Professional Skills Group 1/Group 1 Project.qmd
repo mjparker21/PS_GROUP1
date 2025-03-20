@@ -61,7 +61,7 @@ library(patchwork)
 library(moderndive)
 library(knitr)
 library(kableExtra)
-setwd("~/Downloads")
+setwd("~/Desktop/PS_GROUP1/Professional Skills Group 1")
 data <- read.csv("project1-growth-wt.csv")
 
 ```

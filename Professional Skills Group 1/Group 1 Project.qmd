@@ -43,7 +43,7 @@ Steadily increasing weight is an indicator of a healthy child. Weight change dif
 
 `Sex` - The child's sex (categorical variable, with categories Male or Female).
 
-The goal of this report is to examine which variables influence A child's weight at 24 months first by assessing how well `Wt24` can be predicted using a linear model with `Wt1` as an explanatory variable. We then see if the model if improved by adding `Sex` or `Solids` to the model. Finally, we see if there is any evidence that the difference in weight (`Wt24` - `Wt1`) is different for male and female children.
+The goal of this report is to examine which variables influence a child's weight at 24 months first by assessing how well `Wt24` can be predicted using a linear model with `Wt1` as an explanatory variable. We then see if the model if improved by adding `Sex` or `Solids` to the model. Finally, we see if there is any evidence that the difference in weight (`Wt24` - `Wt1`) is different for male and female children.
 
 @sec-exploratory consists of exploratory analysis explores the potential relationships between variables by use of data visualisation and numerical summaries. @sec-formalanalysis uses linear regression modelling to answer the questions of interest. @sec-conclusion summarisises the findings of the report as well as discuss some limitations of the study.
 
@@ -61,6 +61,7 @@ library(patchwork)
 library(moderndive)
 library(knitr)
 library(kableExtra)
+setwd("~/Downloads")
 data <- read.csv("project1-growth-wt.csv")
 
 ```
@@ -98,6 +99,13 @@ PlotWt1+PlotSolids+plot_layout(ncol=2)
 
 @fig-scat-wt24-wt1 produces a scatterplot of `Wt24` against `Wt1` (left) and `Wt24` aginst `Solids` to assess a potential relationship between the response and explanatory variables. From the scatterplot of `Wt24` against `Wt1`it appears that there is a positive, moderate to strong linear relationship between `Wt24` and `Wt1`. Moreover, with the exception of a few points there appears to be a distinction by `Sex` with female children having lower weight and male children having a higher weight. The scatterplot of `Wt24` against `Solids` examines the relationship by having separate regression lines for males and females. The plot suggests a moderate negative linear relationship for females, indicating that introducing solids later may be associated with lower weight at 24 months. In contrast, the regression line for males remains relatively flat, suggesting a weak relationship between `Wt24` and `Solids` for male children.
 
+```{=latex}
+\begin{table}{h}
+\centering
+\begin{minipage}{0.45}\textwidth
+```
+
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -119,6 +127,7 @@ Wt1.Boxplot <- ggplot(data, aes(x = Sex, y = Wt1, fill = Sex)) +
   labs(x = "Sex", y = "Weight at 1 month (kg)") +
   theme_minimal()
 Wt1.Boxplot+Wt24.boxplot+plot_layout(ncol=2)
+
 ```
 
 @fig-boxplots presents boxplots illustrating the distribution of `Wt24` and `Wt1` categorised by `Sex`. The boxplot of `Wt1` grouped by `Sex` suggests that male children tend to have a slightly higher median weight compared to females, with a slightly wider range of values. The presence of outliers, particularly among female infants, indicates some variation in early weight distribution. The boxplot of `Wt24` grouped by `Sex` highlights that male children exhibit a higher median weight than female children, and the overall distribution of weight is more spread out for males. The increased variation, particularly in the upper range, suggests that male children may experience a broader range of growth trajectories compared to females.
@@ -295,7 +304,7 @@ p1 + hist.residuals + plot_layout(ncol = 2)
 
 To determine if the model in @eq-regparam can be improved by adding the child's sex and/or age at introduction to solids as further explanatory variables we fit the following model:
 
-$${Wt24_i} = {\alpha} +{\beta_1} Wt_i + {\beta_2} Solids_i + {\beta_3}\mathbb{I}_{male}+\epsilon_i,  ~~~~~  \epsilon_i\sim N(0, \sigma^2)$$
+$${Wt24_i} = {\alpha} +{\beta_1} Wt1_i + {\beta_2} Solids_i + {\beta_3}\mathbb{I}_{male}+\epsilon_i,  ~~~~~  \epsilon_i\sim N(0, \sigma^2)$$
 
 Where, $\alpha$ is the intercept, $Wt24_i$, $Wt1_i$ and $Solids_i$, is `Wt24`, `Wt1` and `Solids` for the $i$th child. $\beta_1$ and $\beta_2$ are the slope terms for `Wt1` and `Solids` respectively. $\beta_3$ represents the change in `Wt24` by `Sex` with $\mathbb{I}_{male}$ being an indicator variable that takes the following value 1 if the child is male, and 0 if the child is female.
 
@@ -320,6 +329,7 @@ get_regression_table(int.model22)[, c(1, 2, 5)] |>
             locations = cells_column_labels())
 
 ```
+
 From @tbl-regtable22 we see that the p-value for Solids is 0.17 not statistically significant at a significance level of $\alpha=0.05$. Therefore, we drop Solids from the model and refit with only Wt1 and Sex as predictors.
 
 ```{r}
@@ -345,8 +355,8 @@ get_regression_table(step.model2)[, c(1, 2, 5)] |>
   tab_style(style = cell_text(weight = "bold"),
             locations = cells_column_labels())
 ```
-All coefficients in @tbl-regtable2 appear to be statistically significant due to the low p-values. Therefore, we get the following regression equation:
-$$
+
+All coefficients in @tbl-regtable2 appear to be statistically significant due to the low p-values. Therefore, we get the following regression equation: $$
 \widehat{Wt24_i} = 5.23+1.63Wt1_i+0.53\mathbb{I}_{male}
 $$ {#eq-final}
 
